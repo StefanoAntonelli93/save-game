@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0}
+  body{background:#07070c;font-family:'Pixelify Sans',system-ui,sans-serif}
+  *{box-sizing:border-box}
+  input{font-family:inherit}
+  input::placeholder{color:var(--c-muted)}
+  @keyframes sspop{0%{transform:translateY(14px) scale(.96);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+  @keyframes ssblink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+  @keyframes ssbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" style="--c-bg:#0b0b13;--c-panel:#12121d;--c-elev:#0e0e18;--c-border:#2a2a3d;--c-text:#e8e8f2;--c-muted:#8a8aa8;--c-cover:#1a1a2a;position:relative;min-height:100vh;background:var(--c-bg);color:var(--c-text);font-family:'Pixelify Sans',sans-serif;overflow:hidden">
+  <div ref="{{ bgRef }}" style="position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05"></div>
+
+  <!-- TOP BAR -->
+  <div style="position:sticky;top:0;z-index:40;border-bottom:2px solid var(--c-border);background:var(--c-elev)">
+   <div style="max-width:1240px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+    <div style="display:flex;align-items:center;gap:11px">
+      <span style="font-family:'Press Start 2P';font-size:15px;color:var(--c-text);letter-spacing:1px">SAVE</span>
+      <div style="position:relative;width:26px;height:26px;border-radius:50%;border:4px solid #14e0c0;display:flex;align-items:center;justify-content:center"><span style="position:absolute;top:1px;left:50%;transform:translateX(-50%);width:4px;height:9px;background:#14e0c0;border-radius:2px"></span></div>
+      <span style="font-family:'Press Start 2P';font-size:15px;color:var(--c-text);letter-spacing:1px">GAME</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:38px;height:38px" style-hover="opacity:.7" title="Trofei (in arrivo)">
+        <span style="font-size:20px">&#127942;</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+          <input ref="{{ searchInputRef }}" value="{{ search }}" onInput="{{ onSearch }}" placeholder="Cerca&hellip;" style="width:220px;background:var(--c-bg);border:2px solid var(--c-border);border-radius:8px;padding:8px 13px;color:var(--c-text);font-size:17px;outline:none" />
+        </sc-if>
+        <div onClick="{{ toggleSearch }}" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:38px;height:38px" style-hover="opacity:.7">
+          <span style="font-size:19px">&#128269;</span>
+        </div>
+      </div>
+      <div onClick="{{ toggleTheme }}" style="cursor:pointer;display:flex;align-items:center;justify-content:center;width:38px;height:38px;user-select:none" style-hover="opacity:.7">
+        <span data-moon="1" style="width:18px;height:18px;border-radius:50%;box-shadow:inset -6px -3px 0 0 var(--c-text)"></span>
+        <span data-sun="1" style="display:none;width:17px;height:17px;border-radius:50%;background:var(--c-text)"></span>
+      </div>
+      <div style="position:relative">
+        <div onClick="{{ toggleLogin }}" style="{{ loginBtnStyle }}">
+          <span style="{{ loginDotStyle }}">{{ loginGlyph }}</span>
+          <span>{{ loginLabel }}</span>
+          <span style="font-size:12px;opacity:.7">&#9662;</span>
+        </div>
+        <sc-if value="{{ loginOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:calc(100% + 10px);right:0;width:250px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.45);overflow:hidden;z-index:50">
+            <div style="padding:11px 14px;border-bottom:2px solid var(--c-border);font-family:'Press Start 2P';font-size:9px;color:var(--c-muted);letter-spacing:1px">{{ loginMenuTitle }}</div>
+            <sc-for list="{{ providers }}" as="pr" hint-placeholder-count="4">
+              <div onClick="{{ pr.onClick }}" style="display:flex;align-items:center;gap:11px;padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--c-border)" style-hover="background:var(--c-elev)">
+                <span style="{{ pr.badge }}">{{ pr.glyph }}</span>
+                <span style="flex:1;font-size:17px;color:var(--c-text)">{{ pr.name }}</span>
+                <span style="{{ pr.actionStyle }}">{{ pr.action }}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ isLogged }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ logout }}" style="padding:11px 14px;cursor:pointer;text-align:center;font-size:16px;color:#ff3b30" style-hover="background:var(--c-elev)">Disconnetti</div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+   </div>
+  </div>
+
+  <div style="position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:26px 28px 120px">
+
+    <!-- CONSOLE SECTION -->
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
+      <div style="font-family:'Press Start 2P';font-size:12px;color:var(--c-text);letter-spacing:1px">CONSOLE</div>
+      <span style="font-size:16px;color:var(--c-muted)">clicca per filtrare la libreria</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:26px">
+      <sc-for list="{{ consoleTiles }}" as="t" hint-placeholder-count="5">
+        <div onClick="{{ t.onClick }}" style="{{ t.style }}">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="{{ t.dot }}"></span>
+            <span style="font-family:'Press Start 2P';font-size:12px;letter-spacing:1px">{{ t.label }}</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-top:12px">
+            <span style="font-size:26px;font-weight:600;line-height:1">{{ t.count }}</span>
+            <span style="font-size:15px;color:var(--c-muted)">giochi</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- STATS STRIP -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px">
+      <div style="padding:14px 18px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:11px"><div style="font-size:15px;color:var(--c-muted)">FINITI</div><div style="font-family:'Press Start 2P';font-size:18px;color:#4ade80;margin-top:10px">{{ statFiniti }}</div></div>
+      <div style="padding:14px 18px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:11px"><div style="font-size:15px;color:var(--c-muted)">IN CORSO</div><div style="font-family:'Press Start 2P';font-size:18px;color:#22d3ee;margin-top:10px">{{ statIncorso }}</div></div>
+      <div style="padding:14px 18px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:11px"><div style="font-size:15px;color:var(--c-muted)">BACKLOG</div><div style="font-family:'Press Start 2P';font-size:18px;color:#fbbf24;margin-top:10px">{{ statBacklog }}</div></div>
+      <div style="padding:14px 18px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:11px"><div style="font-size:15px;color:var(--c-muted)">WISHLIST</div><div style="font-family:'Press Start 2P';font-size:18px;color:#ff2e97;margin-top:10px">{{ statWishlist }}</div></div>
+      <div style="padding:14px 18px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:11px"><div style="font-size:15px;color:var(--c-muted)">ORE</div><div style="font-family:'Press Start 2P';font-size:18px;color:#a3e635;margin-top:10px">{{ statOre }}</div></div>
+    </div>
+
+    <!-- FILTER ROW -->
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ statusPills }}" as="p" hint-placeholder-count="5">
+          <span onClick="{{ p.onClick }}" style="{{ p.style }}">{{ p.label }}</span>
+        </sc-for>
+      </div>
+      <div style="font-size:17px;color:var(--c-muted)">{{ resultLabel }}</div>
+    </div>
+
+    <!-- GAME GRID -->
+    <sc-if value="{{ hasGames }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+        <sc-for list="{{ games }}" as="g" hint-placeholder-count="6">
+          <div onClick="{{ g.onOpen }}" style="{{ g.cardStyle }}" style-hover="transform:translateY(-3px)">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;inset:0;{{ g.cover }}"></div>
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px;position:relative">[ COVER ]</span>
+              <span style="{{ g.dot }}"></span>
+              <span style="{{ g.platBadge }}">&#9670; PLATINO</span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 9px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:8px;font-size:14px;color:#22d3ee">{{ g.platform }}</span>
+            </div>
+            <div style="padding:12px 14px">
+              <div style="font-size:20px;font-weight:600;line-height:1.05">{{ g.title }}</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+                <span style="{{ g.blStyle }}">{{ g.blText }}</span>
+                <span style="color:var(--c-muted);font-size:16px">{{ g.brText }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ noGames }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:70px 20px;text-align:center;border:2px dashed var(--c-border);border-radius:12px">
+        <div style="font-family:'Press Start 2P';font-size:14px;color:var(--c-muted)">NESSUN GIOCO</div>
+        <div style="font-size:18px;color:var(--c-muted);margin-top:14px">Prova a cambiare console, stato o ricerca.</div>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- GAME DETAIL OVERLAY -->
+  <sc-if value="{{ detailOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeDetail }}" style="position:fixed;inset:0;z-index:80;background:rgba(4,4,10,.72);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 20px">
+      <div style="width:100%;max-width:1000px;background:var(--c-bg);border:2px solid var(--c-border);border-radius:14px;overflow:hidden;animation:sspop .3s ease-out" onClick="{{ stopProp }}">
+
+        <!-- header: iconic phrase on top -->
+        <div style="position:relative;padding:26px 30px 24px;border-bottom:2px solid var(--c-border);background:var(--c-elev)">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px">
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <span style="font-family:'Press Start 2P';font-size:16px;color:var(--c-text);letter-spacing:1px">{{ detail.title }}</span>
+              <span style="padding:3px 11px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:8px;font-size:15px;color:#22d3ee">{{ detail.platform }}</span>
+              <span style="{{ detail.statusStyle }}">{{ detail.statusLabel }}</span>
+              <span style="{{ detail.platRibbon }}">&#9670; PLATINATO</span>
+            </div>
+            <span onClick="{{ closeDetail }}" style="cursor:pointer;flex:none;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:2px solid var(--c-border);border-radius:8px;color:var(--c-muted);font-size:22px">&times;</span>
+          </div>
+          <div style="font-size:26px;line-height:1.3;color:var(--c-text);font-style:italic;text-wrap:pretty">&ldquo;{{ detail.quote }}&rdquo;</div>
+        </div>
+
+        <!-- body: cover left, trophies right -->
+        <div style="display:flex;gap:26px;padding:26px 30px;flex-wrap:wrap">
+          <div style="{{ detail.coverStyle }}">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">
+              <span style="font-family:'Press Start 2P';font-size:12px;color:var(--c-text);text-align:center;padding:0 16px;line-height:1.5">{{ detail.title }}</span>
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COPERTINA ]</span>
+            </div>
+          </div>
+
+          <div style="flex:1;min-width:320px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px">
+              <span style="font-family:'Press Start 2P';font-size:12px;color:var(--c-text);letter-spacing:1px">TROFEI PER IL PLATINO</span>
+              <span style="font-size:16px;color:var(--c-muted)">{{ detail.trophyProgress }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <sc-for list="{{ detail.trophies }}" as="tr" hint-placeholder-count="8">
+                <div style="{{ tr.rowStyle }}">
+                  <div style="{{ tr.badge }}">{{ tr.letter }}</div>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:19px;font-weight:600;color:var(--c-text);line-height:1.1">{{ tr.name }}</div>
+                    <div style="font-size:15px;color:var(--c-muted);margin-top:3px">{{ tr.desc }}</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                    <span style="{{ tr.tierStyle }}">{{ tr.tierLabel }}</span>
+                    <span style="{{ tr.stateStyle }}">{{ tr.state }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <!-- trailer bottom -->
+        <div style="padding:0 30px 30px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <span style="width:24px;height:17px;background:#ff0000;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:11px">&#9658;</span>
+            <span style="font-family:'Press Start 2P';font-size:12px;color:var(--c-text);letter-spacing:1px">TRAILER UFFICIALE</span>
+          </div>
+          <div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:11px;overflow:hidden;border:2px solid var(--c-border);background:#000">
+            <iframe src="{{ detail.ytSrc }}" title="Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- AI AVATAR -->
+  <sc-if value="{{ aiOpen }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed;z-index:70;right:22px;bottom:20px;width:370px;max-width:calc(100vw - 44px);background:var(--c-panel);border:2px solid #ff3b30;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 18px rgba(255,59,48,.22);overflow:hidden;animation:sspop .4s ease-out">
+      <!-- header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border-bottom:2px solid var(--c-border);background:var(--c-elev)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="flex:none;width:36px;height:36px;background:#1a1a2a;border:2px solid #22d3ee;border-radius:8px;position:relative;animation:ssbob 3.5s ease-in-out infinite">
+            <span style="position:absolute;top:10px;left:8px;width:6px;height:6px;border-radius:2px;background:#22d3ee;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;top:10px;right:8px;width:6px;height:6px;border-radius:2px;background:#22d3ee;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;bottom:8px;left:10px;right:10px;height:4px;border-radius:2px;background:#ff3b30"></span>
+          </div>
+          <div>
+            <div style="font-family:'Press Start 2P';font-size:10px;color:var(--c-text)">PIXEL</div>
+            <div style="display:flex;align-items:center;gap:5px;margin-top:4px"><span style="width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80"></span><span style="font-size:14px;color:var(--c-muted)">il tuo assistente</span></div>
+          </div>
+        </div>
+        <span onClick="{{ closeAi }}" style="cursor:pointer;color:var(--c-muted);font-size:20px;line-height:1;padding:2px 6px">&times;</span>
+      </div>
+      <!-- messages -->
+      <div ref="{{ chatRef }}" style="max-height:280px;overflow-y:auto;padding:14px 13px;display:flex;flex-direction:column;gap:9px">
+        <sc-for list="{{ chatMsgs }}" as="m" hint-placeholder-count="1">
+          <div style="{{ m.rowStyle }}"><div style="{{ m.bubble }}">{{ m.node }}</div></div>
+        </sc-for>
+      </div>
+      <!-- input -->
+      <div style="display:flex;align-items:center;gap:9px;padding:11px 13px;border-top:2px solid var(--c-border);background:var(--c-elev)">
+        <input value="{{ draft }}" onInput="{{ onDraft }}" onKeyDown="{{ onChatKey }}" placeholder="Chiedi a Pixel&hellip;" style="flex:1;background:var(--c-bg);border:2px solid var(--c-border);border-radius:8px;padding:9px 13px;color:var(--c-text);font-size:17px;outline:none" />
+        <div onClick="{{ sendChat }}" style="cursor:pointer;flex:none;width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#ff3b30;border-radius:8px;color:#fff;font-size:18px;box-shadow:0 0 12px rgba(255,59,48,.4)">&#9658;</div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ aiClosed }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;z-index:70;right:22px;bottom:20px;display:flex;align-items:flex-end;gap:11px">
+      <div onClick="{{ openAi }}" style="cursor:pointer;max-width:280px;background:var(--c-panel);border:2px solid #22d3ee;border-radius:11px;border-bottom-right-radius:2px;box-shadow:0 8px 22px rgba(0,0,0,.4);padding:11px 13px;animation:sspop .4s ease-out">
+        <div style="font-family:'Press Start 2P';font-size:8px;color:#22d3ee;margin-bottom:6px">PIXEL</div>
+        <div style="font-size:17px;line-height:1.3;color:var(--c-text)">{{ teaser }}</div>
+      </div>
+      <div onClick="{{ openAi }}" style="cursor:pointer;flex:none;width:56px;height:56px;background:#1a1a2a;border:2px solid #22d3ee;border-radius:11px;box-shadow:0 0 16px rgba(34,211,238,.5);position:relative;animation:ssbob 3.5s ease-in-out infinite">
+        <span style="position:absolute;top:15px;left:12px;width:8px;height:8px;border-radius:2px;background:#22d3ee;animation:ssblink 4s infinite"></span>
+        <span style="position:absolute;top:15px;right:12px;width:8px;height:8px;border-radius:2px;background:#22d3ee;animation:ssblink 4s infinite"></span>
+        <span style="position:absolute;bottom:13px;left:15px;right:15px;height:5px;border-radius:2px;background:#ff3b30"></span>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- RAGE BUTTON -->
+  <sc-if value="{{ rageBtnVisible }}" hint-placeholder-val="{{ true }}">
+    <div onClick="{{ openRage }}" style="position:fixed;z-index:69;left:22px;bottom:20px;cursor:pointer;display:flex;align-items:center;gap:8px;padding:11px 16px;background:#ff3b30;border:2px solid #ff7a70;border-radius:9px;box-shadow:0 6px 18px rgba(255,59,48,.45);font-family:'Press Start 2P';font-size:12px;color:#fff;letter-spacing:1px" style-hover="transform:translateY(-2px)">
+      <span style="font-size:15px">&#128293;</span> RAGE
+    </div>
+  </sc-if>
+
+  <!-- RAGE MODAL -->
+  <sc-if value="{{ rageOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeRage }}" style="position:fixed;inset:0;z-index:90;background:rgba(8,4,4,.82);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:520px;background:var(--c-panel);border:3px solid #ff3b30;border-radius:14px;overflow:hidden;box-shadow:0 0 40px rgba(255,59,48,.35)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;border-bottom:2px solid var(--c-border);background:var(--c-elev)">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:20px">&#128293;</span>
+            <span style="font-family:'Press Start 2P';font-size:14px;color:#ff3b30;letter-spacing:1px">RAGE ROOM</span>
+          </div>
+          <span onClick="{{ closeRage }}" style="cursor:pointer;color:var(--c-muted);font-size:22px;line-height:1;padding:2px 6px">&times;</span>
+        </div>
+        <div style="padding:24px 22px 28px;text-align:center">
+          <div style="font-size:18px;color:var(--c-muted);margin-bottom:18px">Sfogati a suon di click. Ci pensa Pixel a tirarti su.</div>
+          <div onClick="{{ smash }}" ref="{{ smashRef }}" style="cursor:pointer;user-select:none;margin:0 auto 18px;width:200px;height:200px;background:var(--c-cover);border:3px solid #ff3b30;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:transform .05s" style-active="transform:scale(.94)">
+            <span style="font-size:64px;line-height:1">&#128128;</span>
+            <span style="font-family:'Press Start 2P';font-size:11px;color:#ff3b30">COLPISCI!</span>
+          </div>
+          <div style="font-family:'Press Start 2P';font-size:26px;color:var(--c-text)">{{ rageCount }}</div>
+          <div style="font-size:15px;color:var(--c-muted);margin-top:6px">click di pura rabbia</div>
+          <div style="margin-top:18px;min-height:58px;display:flex;align-items:center;justify-content:center">
+            <sc-if value="{{ ragePhraseShown }}" hint-placeholder-val="{{ false }}">
+              <div style="background:var(--c-elev);border:2px solid #4ade80;border-radius:10px;padding:12px 16px;font-size:18px;color:var(--c-text);animation:sspop .3s ease-out;max-width:420px">{{ ragePhrase }}</div>
+            </sc-if>
+            <sc-if value="{{ ragePhraseHidden }}" hint-placeholder-val="{{ true }}">
+              <div style="font-size:15px;color:var(--c-muted)">Frase di incoraggiamento tra <b style="color:#a3e635">{{ rageToNext }}</b> click</div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.PLAT = {
+      PC:     {accent:'#22d3ee', stripe:'rgba(34,211,238,.14)'},
+      PS5:    {accent:'#3b82f6', stripe:'rgba(59,130,246,.14)'},
+      Switch: {accent:'#ef4444', stripe:'rgba(239,68,68,.14)'},
+      Xbox:   {accent:'#4ade80', stripe:'rgba(74,222,128,.14)'}
+    };
+    this.STATUS = {
+      finito:   {label:'Finito',   color:'#4ade80'},
+      incorso:  {label:'In corso', color:'#22d3ee'},
+      backlog:  {label:'Backlog',  color:'#fbbf24'},
+      wishlist: {label:'Wishlist', color:'#ff2e97'}
+    };
+    this.games = [
+      {t:'Neon Drifter',      p:'PC',     s:'finito',   h:42,  r:5, plat:1, q:'La citt\u00e0 non dorme mai. E nemmeno noi.',                          yt:'dQw4w9WgXcQ'},
+      {t:'Hollow Depths',     p:'PS5',    s:'finito',   h:28,  r:4, plat:0, q:'Pi\u00f9 a fondo scendi, meno luce ti resta.',                          yt:'dQw4w9WgXcQ'},
+      {t:'Star Reverie',      p:'Switch', s:'finito',   h:120, r:5, plat:1, q:'Ogni stella \u00e8 un sogno che qualcuno ha osato inseguire.',           yt:'dQw4w9WgXcQ'},
+      {t:'Chrono Break',      p:'Xbox',   s:'finito',   h:60,  r:4, plat:0, q:'Il tempo non si ferma. Impara a corrergli accanto.',                    yt:'dQw4w9WgXcQ'},
+      {t:'Ashen Crown',       p:'PS5',    s:'finito',   h:74,  r:5, plat:1, q:'Una corona di cenere pesa pi\u00f9 dell\u2019oro.',                      yt:'dQw4w9WgXcQ'},
+      {t:'Voidrunner',        p:'PC',     s:'finito',   h:31,  r:3, plat:0, q:'Nel vuoto nessuno registra il tuo record. Fallo per te.',              yt:'dQw4w9WgXcQ'},
+      {t:'Lumen Trail',       p:'Switch', s:'finito',   h:18,  r:4, plat:0, q:'Segui la luce, ma non dimenticare da dove vieni.',                     yt:'dQw4w9WgXcQ'},
+      {t:'Iron Vanguard',     p:'Xbox',   s:'finito',   h:52,  r:4, plat:0, q:'L\u2019acciaio non chiede permesso.',                                   yt:'dQw4w9WgXcQ'},
+      {t:'Sable Coast',       p:'PC',     s:'finito',   h:22,  r:5, plat:1, q:'La marea porta via tutto. Tranne i ricordi.',                          yt:'dQw4w9WgXcQ'},
+      {t:'Tidebound',         p:'PS5',    s:'finito',   h:40,  r:3, plat:0, q:'Legati all\u2019onda e lascia che ti porti a casa.',                     yt:'dQw4w9WgXcQ'},
+      {t:'Ember Requiem',     p:'PC',     s:'incorso',  h:12,  r:0, plat:0, q:'Ogni fuoco ha la sua ultima scintilla.',                               yt:'dQw4w9WgXcQ'},
+      {t:'Cobalt Sky',        p:'PS5',    s:'incorso',  h:9,   r:0, plat:0, q:'Il cielo \u00e8 solo l\u2019inizio della mappa.',                        yt:'dQw4w9WgXcQ'},
+      {t:'Grove of Ash',      p:'Switch', s:'incorso',  h:24,  r:0, plat:0, q:'Dalle ceneri del bosco nasce sempre qualcosa.',                        yt:'dQw4w9WgXcQ'},
+      {t:'Redline Zero',      p:'Xbox',   s:'incorso',  h:6,   r:0, plat:0, q:'Supera il limite. Poi cancellalo.',                                    yt:'dQw4w9WgXcQ'},
+      {t:'Pale Lantern',      p:'PC',     s:'incorso',  h:15,  r:0, plat:0, q:'Una lanterna fioca basta a chi conosce la strada.',                    yt:'dQw4w9WgXcQ'},
+      {t:'Pixel Kingdom',     p:'PC',     s:'backlog',  h:0,   r:0, plat:0, q:'Ogni regno inizia da un singolo pixel.',                               yt:'dQw4w9WgXcQ'},
+      {t:'Frost Hollow',      p:'PS5',    s:'backlog',  h:0,   r:0, plat:0, q:'Il gelo custodisce i segreti meglio di chiunque.',                     yt:'dQw4w9WgXcQ'},
+      {t:'Moss & Machine',    p:'Switch', s:'backlog',  h:0,   r:0, plat:0, q:'La natura e l\u2019acciaio, alla fine, imparano a convivere.',          yt:'dQw4w9WgXcQ'},
+      {t:'Zephyr Rift',       p:'Xbox',   s:'backlog',  h:0,   r:0, plat:0, q:'Cavalca il vento prima che cambi idea.',                               yt:'dQw4w9WgXcQ'},
+      {t:'Dust Nomad',        p:'PC',     s:'backlog',  h:0,   r:0, plat:0, q:'Nel deserto, chi si ferma diventa sabbia.',                            yt:'dQw4w9WgXcQ'},
+      {t:'Halcyon Bay',       p:'PS5',    s:'backlog',  h:0,   r:0, plat:0, q:'C\u2019\u00e8 sempre una baia tranquilla dopo la tempesta.',            yt:'dQw4w9WgXcQ'},
+      {t:'Nightglass',        p:'Switch', s:'backlog',  h:0,   r:0, plat:0, q:'Guarda nel vetro della notte: ti guarda anche lui.',                   yt:'dQw4w9WgXcQ'},
+      {t:'Ember Vale',        p:'Switch', s:'wishlist', h:0,   r:0, plat:0, q:'La valle brucia piano, ma non si spegne mai.',                         yt:'dQw4w9WgXcQ'},
+      {t:'Solar Vagrant',     p:'PS5',    s:'wishlist', h:0,   r:0, plat:0, q:'Vagabondo tra i soli, senza mai un tramonto uguale.',                  yt:'dQw4w9WgXcQ'},
+      {t:'Gilded Abyss',      p:'PC',     s:'wishlist', h:0,   r:0, plat:0, q:'Anche l\u2019abisso, a volte, luccica.',                                yt:'dQw4w9WgXcQ'},
+      {t:'Warden\u2019s Oath',p:'Xbox',   s:'wishlist', h:0,   r:0, plat:0, q:'Un giuramento non si spezza. Si onora o si muore.',                     yt:'dQw4w9WgXcQ'},
+      {t:'Paper Comet',       p:'Switch', s:'wishlist', h:0,   r:0, plat:0, q:'Anche una cometa di carta pu\u00f2 illuminare un cielo.',               yt:'dQw4w9WgXcQ'},
+      {t:'Crimson Ledger',    p:'PC',     s:'finito',   h:35,  r:4, plat:0, q:'Ogni debito, prima o poi, viene riscosso.',                            yt:'dQw4w9WgXcQ'},
+      {t:'Auric Depths',      p:'Xbox',   s:'finito',   h:47,  r:5, plat:1, q:'L\u2019oro pi\u00f9 puro sta dove nessuno osa scendere.',                yt:'dQw4w9WgXcQ'},
+      {t:'Static Bloom',      p:'PS5',    s:'incorso',  h:8,   r:0, plat:0, q:'Anche nel rumore pu\u00f2 sbocciare qualcosa.',                          yt:'dQw4w9WgXcQ'},
+      {t:'Verdant Hollow',      p:'PC',     s:'finito',   h:38,  r:4, plat:0, q:'Il bosco ricorda ogni passo che fai.',                                 yt:'dQw4w9WgXcQ'},
+      {t:'Astral Circuit',      p:'PS5',    s:'finito',   h:29,  r:5, plat:1, q:'Le stelle sono nodi di un circuito pi\u00f9 grande.',                    yt:'dQw4w9WgXcQ'},
+      {t:'Ruinseeker',          p:'Xbox',   s:'finito',   h:64,  r:4, plat:0, q:'Ogni rovina custodisce un inizio.',                                     yt:'dQw4w9WgXcQ'},
+      {t:'Glass Meridian',      p:'Switch', s:'finito',   h:21,  r:3, plat:0, q:'Il confine e sottile come vetro. E taglia.',                            yt:'dQw4w9WgXcQ'},
+      {t:'Byte Reverie',        p:'PC',     s:'finito',   h:44,  r:5, plat:1, q:'Sogni fatti di bit, ma pesano come ricordi.',                           yt:'dQw4w9WgXcQ'},
+      {t:'Marrow Deep',         p:'PS5',    s:'incorso',  h:11,  r:0, plat:0, q:'Scendi fin dentro le ossa del mondo.',                                  yt:'dQw4w9WgXcQ'},
+      {t:'Solstice Run',        p:'Switch', s:'incorso',  h:17,  r:0, plat:0, q:'Corri finche il sole non si ferma.',                                    yt:'dQw4w9WgXcQ'},
+      {t:'Ivory Requiem',       p:'Xbox',   s:'finito',   h:55,  r:4, plat:0, q:'Un requiem suonato su tasti d\u2019avorio.',                            yt:'dQw4w9WgXcQ'},
+      {t:'Thornfield',          p:'PC',     s:'backlog',  h:0,   r:0, plat:0, q:'Ogni rosa difende il campo con le spine.',                              yt:'dQw4w9WgXcQ'},
+      {t:'Cinder & Sail',       p:'PS5',    s:'backlog',  h:0,   r:0, plat:0, q:'Naviga tra le ceneri, la rotta e nel vento.',                           yt:'dQw4w9WgXcQ'},
+      {t:'Quartz Dominion',     p:'Xbox',   s:'finito',   h:48,  r:5, plat:1, q:'Il potere e cristallino: si vede attraverso.',                          yt:'dQw4w9WgXcQ'},
+      {t:'Pale Horizon',        p:'Switch', s:'backlog',  h:0,   r:0, plat:0, q:'L\u2019orizzonte pallido promette un altro giorno.',                     yt:'dQw4w9WgXcQ'},
+      {t:'Onyx Parade',         p:'PC',     s:'finito',   h:26,  r:4, plat:0, q:'Una parata di ombre, e tu apri il corteo.',                            yt:'dQw4w9WgXcQ'},
+      {t:'Fable Engine',        p:'PS5',    s:'incorso',  h:13,  r:0, plat:0, q:'Ogni favola ha un motore che la fa girare.',                           yt:'dQw4w9WgXcQ'},
+      {t:'Duskwright',          p:'Xbox',   s:'finito',   h:59,  r:5, plat:1, q:'Chi forgia il crepuscolo non teme la notte.',                          yt:'dQw4w9WgXcQ'},
+      {t:'Neon Abbey',          p:'PC',     s:'wishlist', h:0,   r:0, plat:0, q:'Prega al neon, i santi qui brillano.',                                 yt:'dQw4w9WgXcQ'},
+      {t:'Ferrous Tide',        p:'PS5',    s:'wishlist', h:0,   r:0, plat:0, q:'La marea di ferro non chiede permesso di salire.',                      yt:'dQw4w9WgXcQ'},
+      {t:'Halo of Ash',         p:'Switch', s:'finito',   h:33,  r:3, plat:0, q:'Un\u2019aureola di cenere su un santo stanco.',                         yt:'dQw4w9WgXcQ'},
+      {t:'Mirebound',           p:'Xbox',   s:'backlog',  h:0,   r:0, plat:0, q:'La palude trattiene chi ha fretta.',                                   yt:'dQw4w9WgXcQ'},
+      {t:'Vellum Sky',          p:'PC',     s:'finito',   h:41,  r:4, plat:0, q:'Il cielo e pergamena: scrivici il tuo record.',                        yt:'dQw4w9WgXcQ'},
+      {t:'Cobbled Crowns',      p:'PS5',    s:'wishlist', h:0,   r:0, plat:0, q:'Corone rattoppate per re improvvisati.',                               yt:'dQw4w9WgXcQ'}
+    ];
+    this.games.forEach((g,i) => { g.id = i; });
+    this.TIER = {
+      platinum: {c:'#cfd6e6', label:'PLATINO', letter:'P'},
+      gold:     {c:'#fbbf24', label:'ORO',     letter:'O'},
+      silver:   {c:'#b8c0d0', label:'ARGENTO', letter:'A'},
+      bronze:   {c:'#c8814e', label:'BRONZO',  letter:'B'}
+    };
+    this.quips = [
+      'Ehi! <b style="color:#fbbf24">Neon Drifter 2</b> esce il 14 marzo. Te lo butto in wishlist? \u25B6',
+      'Con 4.821 ore giocate potresti aver salvato una principessa vera, ormai. \uD83D\uDC51',
+      'Gli studi di <b style="color:#22d3ee">Hollow Depths</b> hanno teasato un nuovo capitolo dark-fantasy. Ti tengo aggiornato.',
+      'Hai 218 giochi nel backlog. Nessuna pressione. Zero. Nada. \uD83D\uDE0C',
+      '<b style="color:#4ade80">Star Reverie</b>: 120 ore e 5 stelle. Direi che possiamo chiamarlo amore.',
+      'Psst: 3 giochi della tua wishlist sono in sconto questa settimana. Vuoi che te li segni?'
+    ];
+    this.PROVIDERS = [
+      {id:'PlayStation', label:'PlayStation Network', glyph:'\u25B6', c:'#0070d1'},
+      {id:'Xbox',        label:'Microsoft / Xbox',    glyph:'\u2726', c:'#107c10'},
+      {id:'Nintendo',    label:'Nintendo Account',    glyph:'\u25C9', c:'#e60012'},
+      {id:'Steam',       label:'Steam',               glyph:'\u2699', c:'#2a7fce'},
+      {id:'Epic',        label:'Epic Games',          glyph:'\u25C6', c:'#b0b0b0'}
+    ];
+    this.ragePhrases = [
+      'Respira. Sei pi\u00f9 forte di quel boss. \uD83D\uDCAA',
+      'Ogni rage quit \u00e8 solo un checkpoint. Riprova!',
+      'Il controller ringrazia che sia tutto virtuale. \uD83D\uDE05',
+      'Sfogati pure: domani platini di sicuro. \uD83C\uDFC6',
+      'Non sei tu, \u00e8 il lag. Promesso. \uD83D\uDCE1',
+      'Bravo! Hai appena scaricato 25 nervi. \u26A1',
+      'GG. La rabbia \u00e8 XP: continua a salire di livello. \uD83D\uDD79\uFE0F',
+      'Anche Dark Souls si batte un colpo alla volta. \uD83D\uDDE1\uFE0F'
+    ];
+    this.state = { mode:'dark', consoleF:'all', statusF:'all', search:'', searchOpen:false, quip:0, aiOpen:false, openId:null, chat:[{from:'ai',text:this.quips[0]}], draft:'', loginOpen:false, account:null, rageOpen:false, rageCount:0, rageIdx:-1, ragePhrase:'' };
+  }
+
+  trophiesFor(g){
+    const done = g.s === 'finito';
+    const plat = !!g.plat;
+    const T = (tier,name,desc,got) => ({tier,name,desc,got});
+    return [
+      T('platinum', g.t + ' \u2014 Leggenda', 'Sblocca tutti gli altri trofei del gioco', plat),
+      T('gold', 'Titoli di coda',   'Completa la storia principale', done),
+      T('gold', 'Nessuna piet\u00e0', 'Sconfiggi il boss finale alla difficolt\u00e0 massima', plat),
+      T('silver', 'Cartografo',      'Rivela ogni angolo della mappa', done || plat),
+      T('silver', 'Collezionista',   'Raccogli tutti gli oggetti segreti', plat),
+      T('bronze', 'Primi passi',     'Completa il tutorial iniziale', done || g.s === 'incorso'),
+      T('bronze', 'Sopravvissuto',   'Raggiungi il capitolo 5', done || (g.s === 'incorso' && g.h > 10)),
+      T('bronze', 'Speedrunner',     'Completa un livello in meno di 3 minuti', plat)
+    ];
+  }
+
+  themes(){
+    return {
+      dark:  {'--c-bg':'#0b0b13','--c-panel':'#12121d','--c-elev':'#0e0e18','--c-border':'#2a2a3d','--c-text':'#e8e8f2','--c-muted':'#8a8aa8','--c-cover':'#1a1a2a'},
+      light: {'--c-bg':'#eaecf4','--c-panel':'#ffffff','--c-elev':'#f4f5fb','--c-border':'#d1d5e6','--c-text':'#181828','--c-muted':'#6b6f8c','--c-cover':'#e6e8f4'}
+    };
+  }
+  applyTheme(){
+    const el = this.root; if(!el) return;
+    const v = this.themes()[this.state.mode];
+    Object.keys(v).forEach(k => el.style.setProperty(k, v[k]));
+    const on = this.state.mode === 'light';
+    const q = s => el.querySelector(s);
+    const moon = q('[data-moon]'); if(moon) moon.style.display = on ? 'none' : 'block';
+    const sun = q('[data-sun]'); if(sun) sun.style.display = on ? 'block' : 'none';
+    if(this.bgLayer){ this.bgLayer.style.filter = on ? 'invert(1)' : 'none'; this.bgLayer.style.opacity = on ? '.06' : '.05'; }
+  }
+  patternURI(){
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'><g fill='none' stroke='#ffffff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' opacity='0.9'>` +
+      // gamepad (top-left, tilted)
+      `<g transform='translate(8,20) rotate(-14)'><rect x='0' y='0' width='40' height='20' rx='8'/><line x1='9' y1='10' x2='18' y2='10'/><line x1='13.5' y1='5.5' x2='13.5' y2='14.5'/><circle cx='28' cy='7' r='2.2'/><circle cx='34' cy='13' r='2.2'/></g>` +
+      // d-pad (top-right, tilted)
+      `<g transform='translate(104,14) rotate(18)'><path d='M8 0 h7 v8 h8 v7 h-8 v8 h-7 v-8 h-8 v-7 h8 z'/></g>` +
+      // trophy (bottom-left, tilted)
+      `<g transform='translate(14,92) rotate(-9)'><path d='M2 2 h22 v7 a11 11 0 0 1 -22 0 z'/><path d='M2 4 h-6 a6 6 0 0 0 6 6'/><path d='M24 4 h6 a6 6 0 0 1 -6 6'/><line x1='13' y1='19' x2='13' y2='27'/><line x1='5' y1='30' x2='21' y2='30'/></g>` +
+      // star (center, tilted)
+      `<g transform='translate(66,58) rotate(12)'><path d='M11 0 l3.4 7 7.6 1 -5.5 5.2 1.3 7.6 -6.8 -3.6 -6.8 3.6 1.3 -7.6 -5.5 -5.2 7.6 -1 z'/></g>` +
+      // heart (bottom-right, tilted)
+      `<g transform='translate(104,98) rotate(-16)'><path d='M12 22 l-10 -10 a6.5 6.5 0 0 1 10 -8.5 a6.5 6.5 0 0 1 10 8.5 z'/></g>` +
+      `</g></svg>`;
+    return "url(\"data:image/svg+xml;utf8," + encodeURIComponent(svg) + "\")";
+  }
+  componentDidMount(){
+    this.applyTheme();
+    if(this.bgLayer){ this.bgLayer.style.backgroundImage = this.patternURI(); this.bgLayer.style.backgroundSize = '128px 128px'; this.bgLayer.style.backgroundRepeat = 'repeat'; }
+  }
+  componentDidUpdate(){ this.applyTheme(); if(this.chatBox){ this.chatBox.scrollTop = this.chatBox.scrollHeight; } }
+
+  toggleTheme(){ this.setState(s => ({ mode: s.mode === 'dark' ? 'light' : 'dark' })); }
+
+  stars(r){ return '\u2605'.repeat(r) + '\u2606'.repeat(5 - r); }
+
+  aiReply(t){
+    const q = t.toLowerCase();
+    if(/quando|uscita|esce|capitolo|sequel|seguito|rilasc/.test(q)) return 'Dai miei radar: il prossimo capitolo \u00e8 atteso per <b style="color:#a3e635">inizio 2027</b>. Appena spunta un trailer te lo fisso qui. \uD83D\uDCE1';
+    if(/trofe|platino|obiettiv|achievement/.test(q)) return 'Per il platino ti manca il trofeo pi\u00f9 infame: quello a difficolt\u00e0 massima. Ti preparo una mini-guida? \uD83C\uDFC6';
+    if(/ore|tempo|quanto ho|quanto gioc/.test(q)) return 'Hai <b style="color:#a3e635">4.821 ore</b> all\u2019attivo. Tecnicamente un lavoro part-time. Ma molto pi\u00f9 divertente. \u23F1\uFE0F';
+    if(/consigl|cosa gioco|prossim|inizi|stasera/.test(q)) return 'Col tuo gusto punterei su qualcosa di corto dal backlog: <b style="color:#22d3ee">Frost Hollow</b>, 12 ore e via. \uD83C\uDFAE';
+    if(/produttor|studio|softwar|casa|sviluppat/.test(q)) return 'Lo studio \u00e8 in silenzio radio, ma ha appena aperto posizioni per un nuovo open-world. Profuma di annuncio. \uD83D\uDC40';
+    if(/ciao|hey|ehi|salve|buongiorno|buonasera/.test(q)) return 'Ehil\u00e0! Pixel a rapporto. Chiedimi di uscite, trofei o cosa giocare stasera. \uD83D\uDD79\uFE0F';
+    return 'Interessante! Sto incrociando i dati\u2026 intanto fidati dell\u2019istinto e salva spesso. \uD83D\uDC7E';
+  }
+  sendChat(){
+    const t = (this.state.draft || '').trim();
+    if(!t) return;
+    const reply = this.aiReply(t);
+    this.setState(s => ({ chat:[...s.chat, {from:'me',text:t}, {from:'ai',text:reply}], draft:'', aiOpen:true }));
+  }
+  smash(){
+    this.setState(s => {
+      const c = s.rageCount + 1;
+      if(c % 25 === 0){
+        const idx = (s.rageIdx + 1) % this.ragePhrases.length;
+        return { rageCount:c, rageIdx:idx, ragePhrase:this.ragePhrases[idx] };
+      }
+      return { rageCount:c };
+    });
+  }
+
+  renderVals(){
+    const st = this.state;
+    const byConsole = this.games.filter(g => st.consoleF === 'all' || g.p === st.consoleF);
+
+    // console tiles
+    const order = ['all','PC','PS5','Switch','Xbox'];
+    const labels = {all:'TUTTE', PC:'PC', PS5:'PS5', Switch:'SWITCH', Xbox:'XBOX'};
+    const tileAccent = {all:'#ff3b30', PC:'#22d3ee', PS5:'#3b82f6', Switch:'#ef4444', Xbox:'#4ade80'};
+    const consoleTiles = order.map(k => {
+      const count = k === 'all' ? this.games.length : this.games.filter(g => g.p === k).length;
+      const active = st.consoleF === k;
+      const ac = tileAccent[k];
+      return {
+        label: labels[k], count,
+        onClick: () => this.setState({ consoleF: k }),
+        dot: `display:inline-block;width:13px;height:13px;border-radius:3px;background:${ac};${active?`box-shadow:0 0 10px ${ac}`:''}`,
+        style: `cursor:pointer;padding:15px 16px;border-radius:12px;border:2px solid ${active?ac:'var(--c-border)'};background:${active?'var(--c-panel)':'var(--c-elev)'};color:var(--c-text);transition:border-color .15s,transform .1s;${active?`box-shadow:0 0 0 1px ${ac} inset`:''}`
+      };
+    });
+
+    // status pills
+    const sOrder = ['all','finito','incorso','backlog','wishlist'];
+    const sLabels = {all:'Tutti', finito:'Finiti', incorso:'In corso', backlog:'Backlog', wishlist:'Wishlist'};
+    const statusPills = sOrder.map(k => {
+      const active = st.statusF === k;
+      const col = k === 'all' ? '#ff3b30' : this.STATUS[k].color;
+      return {
+        label: sLabels[k],
+        onClick: () => this.setState({ statusF: k }),
+        style: `cursor:pointer;padding:8px 16px;border-radius:8px;font-size:17px;transition:all .12s;${active?`background:${col};color:#0b0b13;font-weight:600`:'border:2px solid var(--c-border);color:var(--c-muted)'}`
+      };
+    });
+
+    // stats reflect console filter
+    const cnt = s => byConsole.filter(g => g.s === s).length;
+    const statOre = byConsole.reduce((a,g) => a + g.h, 0);
+
+    // full filter
+    const q = st.search.trim().toLowerCase();
+    const filtered = byConsole
+      .filter(g => st.statusF === 'all' || g.s === st.statusF)
+      .filter(g => !q || g.t.toLowerCase().includes(q));
+
+    const games = filtered.map(g => {
+      const stat = this.STATUS[g.s];
+      const plat = this.PLAT[g.p];
+      const rated = g.s === 'finito' || g.s === 'incorso';
+      let blText, blStyle;
+      if (g.s === 'finito') { blText = this.stars(g.r); blStyle = 'color:#fbbf24;font-size:17px;letter-spacing:1px'; }
+      else if (g.s === 'incorso') { blText = 'In corso'; blStyle = 'color:#22d3ee;font-size:16px'; }
+      else { blText = stat.label; blStyle = `color:${stat.color};font-size:16px`; }
+      const isPlat = !!g.plat;
+      const cardStyle = isPlat
+        ? 'cursor:pointer;background:var(--c-panel);border:2px solid #cfd6e6;border-radius:12px;overflow:hidden;transition:transform .12s,box-shadow .2s;box-shadow:0 0 0 1px #cfd6e6,0 0 20px rgba(207,214,230,.45)'
+        : 'cursor:pointer;background:var(--c-panel);border:2px solid var(--c-border);border-radius:12px;overflow:hidden;transition:transform .12s,box-shadow .2s';
+      return {
+        title: g.t, platform: g.p,
+        onOpen: () => this.setState({ openId: g.id }),
+        cardStyle,
+        cover: `background:repeating-linear-gradient(45deg, ${plat.stripe} 0 8px, transparent 8px 16px)`,
+        dot: `position:absolute;top:10px;left:10px;width:11px;height:11px;border-radius:50%;background:${stat.color};box-shadow:0 0 8px ${stat.color}`,
+        platBadge: isPlat
+          ? 'position:absolute;top:9px;right:10px;padding:3px 9px;border-radius:8px;background:linear-gradient(135deg,#eef2fa,#aab4c8);color:#141420;font-size:12px;font-weight:600;letter-spacing:.5px;box-shadow:0 0 10px rgba(207,214,230,.7)'
+          : 'display:none',
+        blText, blStyle,
+        brText: rated ? (g.h + 'h') : '\u2014'
+      };
+    });
+
+    // detail view
+    let detail = null;
+    if (st.openId !== null) {
+      const g = this.games[st.openId];
+      const stat = this.STATUS[g.s];
+      const plat = this.PLAT[g.p];
+      const trophies = this.trophiesFor(g).map(tr => {
+        const meta = this.TIER[tr.tier];
+        return {
+          name: tr.name, desc: tr.desc,
+          tierLabel: meta.label,
+          badge: `flex:none;width:42px;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Press Start 2P';font-size:14px;color:#141420;background:${meta.c};${tr.got ? `box-shadow:0 0 12px ${meta.c}aa` : 'filter:grayscale(.7);opacity:.5'}`,
+          letter: meta.letter,
+          rowStyle: `display:flex;gap:13px;align-items:center;padding:12px 14px;border:2px solid ${tr.got ? meta.c + '55' : 'var(--c-border)'};border-radius:9px;background:var(--c-elev);${tr.got ? '' : 'opacity:.72'}`,
+          tierStyle: `flex:none;font-size:13px;font-weight:600;color:${tr.got ? meta.c : 'var(--c-muted)'}`,
+          state: tr.got ? '\u2713 Sbloccato' : '\u2715 Bloccato',
+          stateStyle: `flex:none;font-size:14px;color:${tr.got ? '#4ade80' : 'var(--c-muted)'}`
+        };
+      });
+      const earned = trophies.filter(t => t.state.startsWith('\u2713')).length;
+      detail = {
+        title: g.t, platform: g.p, quote: g.q,
+        statusLabel: stat.label,
+        statusStyle: `padding:4px 12px;border-radius:8px;font-size:15px;background:${stat.color}22;color:${stat.color};border:1px solid ${stat.color}66`,
+        isPlat: !!g.plat,
+        platRibbon: g.plat
+          ? 'display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:8px;background:linear-gradient(135deg,#eef2fa,#aab4c8);color:#141420;font-size:14px;font-weight:600;box-shadow:0 0 14px rgba(207,214,230,.6)'
+          : 'display:none',
+        coverStyle: `position:relative;width:300px;height:400px;flex:none;border-radius:12px;overflow:hidden;border:2px solid ${g.plat ? '#cfd6e6' : 'var(--c-border)'};background:var(--c-cover);${g.plat ? 'box-shadow:0 0 24px rgba(207,214,230,.4)' : ''};background-image:repeating-linear-gradient(45deg, ${plat.stripe} 0 12px, transparent 12px 24px)`,
+        trophies,
+        trophyProgress: earned + ' / ' + trophies.length + ' trofei',
+        ytSrc: `https://www.youtube-nocookie.com/embed/${g.yt}`
+      };
+    }
+
+    return {
+      rootRef: el => { this.root = el; },
+      search: st.search,
+      onSearch: e => this.setState({ search: e.target.value }),
+      searchOpen: st.searchOpen,
+      toggleSearch: () => this.setState(s => ({ searchOpen: !s.searchOpen })),
+      searchInputRef: el => { if(el) el.focus(); },
+      toggleTheme: () => this.toggleTheme(),
+      consoleTiles, statusPills,
+      statFiniti: cnt('finito'), statIncorso: cnt('incorso'),
+      statBacklog: cnt('backlog'), statWishlist: cnt('wishlist'),
+      statOre: statOre.toLocaleString('it-IT'),
+      games,
+      hasGames: games.length > 0,
+      noGames: games.length === 0,
+      resultLabel: games.length + (games.length === 1 ? ' gioco' : ' giochi'),
+      bgRef: el => { this.bgLayer = el; },
+      teaser: React.createElement('span', { dangerouslySetInnerHTML: { __html: this.quips[0] } }),
+      loginOpen: st.loginOpen,
+      isLogged: !!st.account,
+      toggleLogin: () => this.setState(s => ({ loginOpen: !s.loginOpen })),
+      logout: () => this.setState({ account:null, loginOpen:false }),
+      loginLabel: st.account ? st.account.id : 'Accedi',
+      loginGlyph: st.account ? st.account.glyph : '\u25CB',
+      loginMenuTitle: st.account ? 'ACCOUNT COLLEGATO' : 'COLLEGA UN ACCOUNT',
+      loginBtnStyle: `cursor:pointer;display:flex;align-items:center;gap:9px;padding:9px 14px;border-radius:8px;font-size:16px;color:var(--c-text);border:2px solid ${st.account ? st.account.c : 'var(--c-border)'};background:${st.account ? st.account.c + '22' : 'var(--c-bg)'}`,
+      loginDotStyle: `flex:none;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;background:${st.account ? st.account.c : '#3a3a52'}`,
+      providers: this.PROVIDERS.map(p => {
+        const active = st.account && st.account.id === p.id;
+        return {
+          name: p.label, glyph: p.glyph,
+          onClick: () => this.setState({ account:p, loginOpen:false }),
+          badge: `flex:none;width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;background:${p.c}`,
+          action: active ? 'Collegato' : 'Collega',
+          actionStyle: `font-size:14px;color:${active ? '#4ade80' : 'var(--c-muted)'}`
+        };
+      }),
+      rageBtnVisible: !st.aiOpen && !st.rageOpen,
+      rageOpen: st.rageOpen,
+      openRage: () => this.setState({ rageOpen:true }),
+      closeRage: () => this.setState({ rageOpen:false }),
+      smash: () => this.smash(),
+      smashRef: () => {},
+      rageCount: st.rageCount,
+      ragePhrase: st.ragePhrase,
+      ragePhraseShown: !!st.ragePhrase,
+      ragePhraseHidden: !st.ragePhrase,
+      rageToNext: 25 - (st.rageCount % 25),
+      chatMsgs: st.chat.map(m => {
+        const ai = m.from === 'ai';
+        return {
+          node: ai ? React.createElement('span', { dangerouslySetInnerHTML: { __html: m.text } }) : m.text,
+          rowStyle: `display:flex;${ai ? 'justify-content:flex-start' : 'justify-content:flex-end'}`,
+          bubble: ai
+            ? 'max-width:82%;background:var(--c-elev);border:1px solid var(--c-border);border-radius:9px;border-bottom-left-radius:2px;padding:9px 12px;font-size:17px;line-height:1.32;color:var(--c-text)'
+            : 'max-width:82%;background:#ff3b30;border-radius:9px;border-bottom-right-radius:2px;padding:9px 12px;font-size:17px;line-height:1.32;color:#fff'
+        };
+      }),
+      chatRef: el => { this.chatBox = el; },
+      draft: st.draft,
+      onDraft: e => this.setState({ draft: e.target.value }),
+      onChatKey: e => { if(e.key === 'Enter'){ e.preventDefault(); this.sendChat(); } },
+      sendChat: () => this.sendChat(),
+      aiOpen: st.aiOpen,
+      aiClosed: !st.aiOpen,
+      closeAi: () => this.setState({ aiOpen:false }),
+      openAi: () => this.setState({ aiOpen:true }),
+      detail,
+      detailOpen: detail !== null,
+      closeDetail: () => this.setState({ openId:null }),
+      stopProp: e => e.stopPropagation()
+    };
+  }
+}
+</script>
+</body>
+</html>

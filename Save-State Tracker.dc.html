@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Silkscreen:wght@400;700&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#e6e4dd;font-family:'Pixelify Sans',system-ui,sans-serif}
+  *{box-sizing:border-box}
+  .dv-turn{padding:44px 48px 40px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}
+  .dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 26px}
+  .dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}
+  .dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#1a1a1a}
+  .dv-opts{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
+  .dv-opt{flex:none;display:flex;flex-direction:column;gap:11px;scroll-margin-top:16px}
+  .dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+  .dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 12px/1.3 system-ui,sans-serif;color:rgba(0,0,0,.55)}
+  .dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+  .dv-next{margin:26px 0 0;font:12px/1.6 system-ui,sans-serif;color:rgba(0,0,0,.5)}
+  .dv-next a{color:rgba(0,0,0,.5)}
+  @keyframes sspop{0%{transform:translateY(14px);opacity:0}100%{transform:translateY(0);opacity:1}}
+  @keyframes ssblink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t2">
+  <div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Su base 1a &mdash; pixel pi&ugrave; moderno, 3 arrotondamenti + toggle dark/light (clicca l&rsquo;interruttore)</span></div>
+  <div class="dv-opts">
+
+    <!-- ========================= OPT 2A : NEON ROUNDED ========================= -->
+    <div class="dv-opt" id="2a">
+      <div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Neon Rounded &mdash; pill morbide (r22), glow soft, titoli Pixelify</div>
+      <div data-screen-label="2a" ref="{{ ref2a }}" style="--c-bg:#0b0b13;--c-panel:#12121d;--c-elev:#0e0e18;--c-border:#2a2a3d;--c-text:#e8e8f2;--c-muted:#8a8aa8;--c-cover:#1a1a2a;position:relative;width:1180px;background:var(--c-bg);border:2px solid var(--c-border);border-radius:22px;overflow:hidden;color:var(--c-text);font-family:'Pixelify Sans',sans-serif">
+        <div style="position:absolute;inset:0;pointer-events:none;z-index:40;background:repeating-linear-gradient(rgba(127,127,160,.05) 0 1px, transparent 1px 4px)"></div>
+
+        <!-- top bar -->
+        <div style="position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px;border-bottom:2px solid var(--c-border);background:var(--c-elev)">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:24px;height:24px;background:#ff2e97;border-radius:7px;box-shadow:0 0 12px rgba(255,46,151,.6)"></div>
+            <div style="font-family:'Press Start 2P';font-size:13px;color:var(--c-text);letter-spacing:1px">SAVE&middot;STATE</div>
+          </div>
+          <div style="flex:1;max-width:320px;display:flex;align-items:center;gap:8px;padding:9px 16px;background:var(--c-bg);border:2px solid var(--c-border);border-radius:999px">
+            <span style="color:#22d3ee;font-size:18px">&#9906;</span>
+            <span style="font-size:19px;color:var(--c-muted)">Cerca giochi&hellip;</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="display:flex;gap:7px;font-size:17px">
+              <span style="padding:7px 15px;background:#ff2e97;color:#0b0b13;font-weight:600;border-radius:999px">Tutti</span>
+              <span style="padding:7px 15px;border:2px solid var(--c-border);color:var(--c-muted);border-radius:999px">Finiti</span>
+              <span style="padding:7px 15px;border:2px solid var(--c-border);color:var(--c-muted);border-radius:999px">Backlog</span>
+            </div>
+            <!-- THEME TOGGLE -->
+            <div onClick="{{ tog2a }}" style="cursor:pointer;display:flex;align-items:center;gap:7px">
+              <span data-moon="1" style="font-size:16px;opacity:1">&#9789;</span>
+              <div data-track="1" style="width:44px;height:24px;background:#3a3a52;border-radius:999px;position:relative;transition:background .18s">
+                <div data-knob="1" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:999px;transition:transform .18s;box-shadow:0 1px 3px rgba(0,0,0,.4)"></div>
+              </div>
+              <span data-sun="1" style="font-size:16px;opacity:.35">&#9728;</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- stats strip -->
+        <div style="position:relative;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:16px 24px;background:var(--c-elev);border-bottom:2px solid var(--c-border)">
+          <div style="padding:12px 16px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:14px"><div style="font-size:15px;color:var(--c-muted)">FINITI</div><div style="font-family:'Press Start 2P';font-size:17px;color:#4ade80;margin-top:9px">342</div></div>
+          <div style="padding:12px 16px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:14px"><div style="font-size:15px;color:var(--c-muted)">IN CORSO</div><div style="font-family:'Press Start 2P';font-size:17px;color:#22d3ee;margin-top:9px">7</div></div>
+          <div style="padding:12px 16px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:14px"><div style="font-size:15px;color:var(--c-muted)">BACKLOG</div><div style="font-family:'Press Start 2P';font-size:17px;color:#fbbf24;margin-top:9px">218</div></div>
+          <div style="padding:12px 16px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:14px"><div style="font-size:15px;color:var(--c-muted)">WISHLIST</div><div style="font-family:'Press Start 2P';font-size:17px;color:#ff2e97;margin-top:9px">54</div></div>
+          <div style="padding:12px 16px;background:var(--c-panel);border:2px solid var(--c-border);border-radius:14px"><div style="font-size:15px;color:var(--c-muted)">ORE</div><div style="font-family:'Press Start 2P';font-size:17px;color:var(--c-text);margin-top:9px">4821</div></div>
+        </div>
+
+        <!-- game grid -->
+        <div style="position:relative;z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:22px 24px 96px">
+          <div style="background:var(--c-panel);border:2px solid var(--c-border);border-radius:16px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,46,151,.14) 0 8px,transparent 8px 16px)"></div>
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:10px;height:10px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 9px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:999px;font-size:14px;color:#22d3ee">PC</span>
+            </div>
+            <div style="padding:12px 14px">
+              <div style="font-size:20px;font-weight:600;line-height:1.05">Neon Drifter</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style="color:var(--c-muted);font-size:16px">42h</span></div>
+            </div>
+          </div>
+          <div style="background:var(--c-panel);border:2px solid var(--c-border);border-radius:16px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(34,211,238,.14) 0 8px,transparent 8px 16px)"></div>
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:10px;height:10px;border-radius:50%;background:#22d3ee;box-shadow:0 0 8px #22d3ee"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 9px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:999px;font-size:14px;color:#22d3ee">PS5</span>
+            </div>
+            <div style="padding:12px 14px">
+              <div style="font-size:20px;font-weight:600;line-height:1.05">Hollow Depths</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9734;</span><span style="color:var(--c-muted);font-size:16px">28h</span></div>
+            </div>
+          </div>
+          <div style="background:var(--c-panel);border:2px solid var(--c-border);border-radius:16px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(74,222,128,.14) 0 8px,transparent 8px 16px)"></div>
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:10px;height:10px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 9px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:999px;font-size:14px;color:#22d3ee">SWITCH</span>
+            </div>
+            <div style="padding:12px 14px">
+              <div style="font-size:20px;font-weight:600;line-height:1.05">Star Reverie</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style="color:var(--c-muted);font-size:16px">120h</span></div>
+            </div>
+          </div>
+          <div style="background:var(--c-panel);border:2px solid var(--c-border);border-radius:16px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(251,191,36,.14) 0 8px,transparent 8px 16px)"></div>
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:10px;height:10px;border-radius:50%;background:#fbbf24;box-shadow:0 0 8px #fbbf24"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 9px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:999px;font-size:14px;color:#22d3ee">PC</span>
+            </div>
+            <div style="padding:12px 14px">
+              <div style="font-size:20px;font-weight:600;line-height:1.05">Pixel Kingdom</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:var(--c-muted);font-size:16px">Backlog</span><span style="color:var(--c-muted);font-size:16px">&mdash;</span></div>
+            </div>
+          </div>
+          <div style="background:var(--c-panel);border:2px solid var(--c-border);border-radius:16px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(74,222,128,.14) 0 8px,transparent 8px 16px)"></div>
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:10px;height:10px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 9px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:999px;font-size:14px;color:#22d3ee">XBOX</span>
+            </div>
+            <div style="padding:12px 14px">
+              <div style="font-size:20px;font-weight:600;line-height:1.05">Chrono Break</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9734;</span><span style="color:var(--c-muted);font-size:16px">60h</span></div>
+            </div>
+          </div>
+          <div style="background:var(--c-panel);border:2px solid var(--c-border);border-radius:16px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,46,151,.14) 0 8px,transparent 8px 16px)"></div>
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:10px;height:10px;border-radius:50%;background:#ff2e97;box-shadow:0 0 8px #ff2e97"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 9px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:999px;font-size:14px;color:#22d3ee">SWITCH</span>
+            </div>
+            <div style="padding:12px 14px">
+              <div style="font-size:20px;font-weight:600;line-height:1.05">Ember Vale</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#ff2e97;font-size:16px">Wishlist</span><span style="color:var(--c-muted);font-size:16px">&mdash;</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI avatar popup -->
+        <div style="position:absolute;z-index:50;right:20px;bottom:18px;display:flex;align-items:flex-end;gap:10px;animation:sspop .5s ease-out">
+          <div style="max-width:340px;background:var(--c-panel);border:2px solid #ff2e97;border-radius:16px;box-shadow:0 6px 20px rgba(255,46,151,.28);padding:12px 14px">
+            <div style="font-family:'Press Start 2P';font-size:9px;color:#22d3ee;margin-bottom:7px">PIXEL &middot; AI</div>
+            <div style="font-size:18px;line-height:1.25;color:var(--c-text)">Ehi! <span style="color:#fbbf24">Neon Drifter 2</span> esce il 14 marzo. Te lo butto in wishlist? &#9658;</div>
+          </div>
+          <div style="flex:none;width:52px;height:52px;background:#1a1a2a;border:2px solid #22d3ee;border-radius:14px;box-shadow:0 0 14px rgba(34,211,238,.5);position:relative">
+            <span style="position:absolute;top:14px;left:11px;width:8px;height:8px;border-radius:2px;background:#22d3ee;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;top:14px;right:11px;width:8px;height:8px;border-radius:2px;background:#22d3ee;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;bottom:12px;left:14px;right:14px;height:5px;border-radius:3px;background:#ff2e97"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================= OPT 2B : SOFT GRID ========================= -->
+    <div class="dv-opt" id="2b">
+      <div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>Soft Grid &mdash; angoli 10px, flat senza glow, accento cyan</div>
+      <div data-screen-label="2b" ref="{{ ref2b }}" style="--c-bg:#0b0b13;--c-panel:#12121d;--c-elev:#0e0e18;--c-border:#2a2a3d;--c-text:#e8e8f2;--c-muted:#8a8aa8;--c-cover:#1a1a2a;position:relative;width:1180px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:10px;overflow:hidden;color:var(--c-text);font-family:'Pixelify Sans',sans-serif">
+
+        <!-- top bar -->
+        <div style="position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px;border-bottom:1px solid var(--c-border);background:var(--c-elev)">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:22px;height:22px;background:#22d3ee;border-radius:5px"></div>
+            <div style="font-family:'Press Start 2P';font-size:13px;color:var(--c-text);letter-spacing:1px">SAVE&middot;STATE</div>
+          </div>
+          <div style="flex:1;max-width:320px;display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:8px">
+            <span style="color:#22d3ee;font-size:18px">&#9906;</span>
+            <span style="font-size:19px;color:var(--c-muted)">Cerca giochi&hellip;</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="display:flex;gap:7px;font-size:17px">
+              <span style="padding:7px 14px;background:#22d3ee;color:#0b0b13;font-weight:600;border-radius:8px">Tutti</span>
+              <span style="padding:7px 14px;border:1px solid var(--c-border);color:var(--c-muted);border-radius:8px">Finiti</span>
+              <span style="padding:7px 14px;border:1px solid var(--c-border);color:var(--c-muted);border-radius:8px">Backlog</span>
+            </div>
+            <div onClick="{{ tog2b }}" style="cursor:pointer;display:flex;align-items:center;gap:7px">
+              <span data-moon="1" style="font-size:16px;opacity:1">&#9789;</span>
+              <div data-track="1" style="width:44px;height:24px;background:#3a3a52;border-radius:999px;position:relative;transition:background .18s">
+                <div data-knob="1" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:999px;transition:transform .18s;box-shadow:0 1px 3px rgba(0,0,0,.4)"></div>
+              </div>
+              <span data-sun="1" style="font-size:16px;opacity:.35">&#9728;</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- stats strip -->
+        <div style="position:relative;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--c-border);border-bottom:1px solid var(--c-border)">
+          <div style="padding:14px 18px;background:var(--c-elev)"><div style="font-size:15px;color:var(--c-muted)">FINITI</div><div style="font-family:'Press Start 2P';font-size:17px;color:#4ade80;margin-top:9px">342</div></div>
+          <div style="padding:14px 18px;background:var(--c-elev)"><div style="font-size:15px;color:var(--c-muted)">IN CORSO</div><div style="font-family:'Press Start 2P';font-size:17px;color:#22d3ee;margin-top:9px">7</div></div>
+          <div style="padding:14px 18px;background:var(--c-elev)"><div style="font-size:15px;color:var(--c-muted)">BACKLOG</div><div style="font-family:'Press Start 2P';font-size:17px;color:#fbbf24;margin-top:9px">218</div></div>
+          <div style="padding:14px 18px;background:var(--c-elev)"><div style="font-size:15px;color:var(--c-muted)">WISHLIST</div><div style="font-family:'Press Start 2P';font-size:17px;color:#ff2e97;margin-top:9px">54</div></div>
+          <div style="padding:14px 18px;background:var(--c-elev)"><div style="font-size:15px;color:var(--c-muted)">ORE</div><div style="font-family:'Press Start 2P';font-size:17px;color:var(--c-text);margin-top:9px">4821</div></div>
+        </div>
+
+        <!-- game grid -->
+        <div style="position:relative;z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:20px 24px 96px">
+          <div style="background:var(--c-panel);border:1px solid var(--c-border);border-radius:10px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:9px;height:9px;border-radius:50%;background:#4ade80"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:6px;font-size:14px;color:#22d3ee">PC</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Neon Drifter</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style="color:var(--c-muted);font-size:16px">42h</span></div></div>
+          </div>
+          <div style="background:var(--c-panel);border:1px solid var(--c-border);border-radius:10px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:9px;height:9px;border-radius:50%;background:#22d3ee"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:6px;font-size:14px;color:#22d3ee">PS5</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Hollow Depths</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9734;</span><span style="color:var(--c-muted);font-size:16px">28h</span></div></div>
+          </div>
+          <div style="background:var(--c-panel);border:1px solid var(--c-border);border-radius:10px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:9px;height:9px;border-radius:50%;background:#4ade80"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:6px;font-size:14px;color:#22d3ee">SWITCH</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Star Reverie</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style="color:var(--c-muted);font-size:16px">120h</span></div></div>
+          </div>
+          <div style="background:var(--c-panel);border:1px solid var(--c-border);border-radius:10px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;padding:2px 7px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:5px;font-size:12px;color:var(--c-muted)">BACKLOG</span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:6px;font-size:14px;color:#22d3ee">PC</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Pixel Kingdom</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:var(--c-muted);font-size:16px">da giocare</span><span style="color:var(--c-muted);font-size:16px">&mdash;</span></div></div>
+          </div>
+          <div style="background:var(--c-panel);border:1px solid var(--c-border);border-radius:10px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:9px;height:9px;border-radius:50%;background:#4ade80"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:6px;font-size:14px;color:#22d3ee">XBOX</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Chrono Break</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9734;</span><span style="color:var(--c-muted);font-size:16px">60h</span></div></div>
+          </div>
+          <div style="background:var(--c-panel);border:1px solid var(--c-border);border-radius:10px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;padding:2px 7px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:5px;font-size:12px;color:#ff2e97">WISH</span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:6px;font-size:14px;color:#22d3ee">SWITCH</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Ember Vale</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#ff2e97;font-size:16px">wishlist</span><span style="color:var(--c-muted);font-size:16px">&mdash;</span></div></div>
+          </div>
+        </div>
+
+        <!-- AI avatar popup -->
+        <div style="position:absolute;z-index:50;right:20px;bottom:18px;display:flex;align-items:flex-end;gap:10px;animation:sspop .5s ease-out">
+          <div style="max-width:340px;background:var(--c-panel);border:1px solid #22d3ee;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.35);padding:12px 14px">
+            <div style="font-family:'Press Start 2P';font-size:9px;color:#22d3ee;margin-bottom:7px">PIXEL &middot; AI</div>
+            <div style="font-size:18px;line-height:1.25;color:var(--c-text)">Ehi! <span style="color:#fbbf24">Neon Drifter 2</span> esce il 14 marzo. Te lo butto in wishlist? &#9658;</div>
+          </div>
+          <div style="flex:none;width:52px;height:52px;background:#1a1a2a;border:1px solid #22d3ee;border-radius:10px;position:relative">
+            <span style="position:absolute;top:14px;left:11px;width:8px;height:8px;border-radius:2px;background:#22d3ee;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;top:14px;right:11px;width:8px;height:8px;border-radius:2px;background:#22d3ee;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;bottom:12px;left:14px;right:14px;height:5px;border-radius:3px;background:#22d3ee"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================= OPT 2C : CRISP GLASS ========================= -->
+    <div class="dv-opt" id="2c">
+      <div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>Crisp Glass &mdash; angoli 6px, pannelli vetro, accento viola+pink</div>
+      <div data-screen-label="2c" ref="{{ ref2c }}" style="--c-bg:#0b0b13;--c-panel:#12121d;--c-elev:#0e0e18;--c-border:#2a2a3d;--c-text:#e8e8f2;--c-muted:#8a8aa8;--c-cover:#1a1a2a;position:relative;width:1180px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:6px;overflow:hidden;color:var(--c-text);font-family:'Pixelify Sans',sans-serif">
+        <div style="position:absolute;top:0;left:0;right:0;height:180px;pointer-events:none;z-index:0;background:radial-gradient(120% 100% at 15% 0%,rgba(139,92,246,.18),transparent 60%),radial-gradient(120% 100% at 90% 0%,rgba(255,46,151,.15),transparent 55%)"></div>
+
+        <!-- top bar -->
+        <div style="position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px;border-bottom:1px solid var(--c-border)">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:22px;height:22px;border-radius:4px;background:linear-gradient(135deg,#8b5cf6,#ff2e97)"></div>
+            <div style="font-family:'Press Start 2P';font-size:13px;color:var(--c-text);letter-spacing:1px">SAVE&middot;STATE</div>
+          </div>
+          <div style="flex:1;max-width:320px;display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--c-panel);border:1px solid var(--c-border);border-radius:6px">
+            <span style="color:#8b5cf6;font-size:18px">&#9906;</span>
+            <span style="font-size:19px;color:var(--c-muted)">Cerca giochi&hellip;</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="display:flex;gap:7px;font-size:17px">
+              <span style="padding:7px 14px;background:linear-gradient(135deg,#8b5cf6,#ff2e97);color:#fff;font-weight:600;border-radius:6px">Tutti</span>
+              <span style="padding:7px 14px;border:1px solid var(--c-border);color:var(--c-muted);border-radius:6px">Finiti</span>
+              <span style="padding:7px 14px;border:1px solid var(--c-border);color:var(--c-muted);border-radius:6px">Backlog</span>
+            </div>
+            <div onClick="{{ tog2c }}" style="cursor:pointer;display:flex;align-items:center;gap:7px">
+              <span data-moon="1" style="font-size:16px;opacity:1">&#9789;</span>
+              <div data-track="1" style="width:44px;height:24px;background:#3a3a52;border-radius:999px;position:relative;transition:background .18s">
+                <div data-knob="1" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:999px;transition:transform .18s;box-shadow:0 1px 3px rgba(0,0,0,.4)"></div>
+              </div>
+              <span data-sun="1" style="font-size:16px;opacity:.35">&#9728;</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- stats strip -->
+        <div style="position:relative;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:16px 24px;border-bottom:1px solid var(--c-border)">
+          <div style="padding:12px 16px;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent);border:1px solid var(--c-border);border-radius:6px"><div style="font-size:15px;color:var(--c-muted)">FINITI</div><div style="font-family:'Press Start 2P';font-size:17px;color:#4ade80;margin-top:9px">342</div></div>
+          <div style="padding:12px 16px;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent);border:1px solid var(--c-border);border-radius:6px"><div style="font-size:15px;color:var(--c-muted)">IN CORSO</div><div style="font-family:'Press Start 2P';font-size:17px;color:#8b5cf6;margin-top:9px">7</div></div>
+          <div style="padding:12px 16px;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent);border:1px solid var(--c-border);border-radius:6px"><div style="font-size:15px;color:var(--c-muted)">BACKLOG</div><div style="font-family:'Press Start 2P';font-size:17px;color:#fbbf24;margin-top:9px">218</div></div>
+          <div style="padding:12px 16px;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent);border:1px solid var(--c-border);border-radius:6px"><div style="font-size:15px;color:var(--c-muted)">WISHLIST</div><div style="font-family:'Press Start 2P';font-size:17px;color:#ff2e97;margin-top:9px">54</div></div>
+          <div style="padding:12px 16px;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent);border:1px solid var(--c-border);border-radius:6px"><div style="font-size:15px;color:var(--c-muted)">ORE</div><div style="font-family:'Press Start 2P';font-size:17px;color:var(--c-text);margin-top:9px">4821</div></div>
+        </div>
+
+        <!-- game grid -->
+        <div style="position:relative;z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:22px 24px 96px">
+          <div style="background:linear-gradient(180deg,rgba(255,255,255,.06),transparent),var(--c-panel);border:1px solid var(--c-border);border-radius:6px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:9px;height:9px;border-radius:50%;background:#4ade80"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:rgba(0,0,0,.35);border:1px solid var(--c-border);border-radius:4px;font-size:14px;color:#8b5cf6">PC</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Neon Drifter</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style="color:var(--c-muted);font-size:16px">42h</span></div></div>
+          </div>
+          <div style="background:linear-gradient(180deg,rgba(255,255,255,.06),transparent),var(--c-panel);border:1px solid var(--c-border);border-radius:6px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:9px;height:9px;border-radius:50%;background:#8b5cf6"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:rgba(0,0,0,.35);border:1px solid var(--c-border);border-radius:4px;font-size:14px;color:#8b5cf6">PS5</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Hollow Depths</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9734;</span><span style="color:var(--c-muted);font-size:16px">28h</span></div></div>
+          </div>
+          <div style="background:linear-gradient(180deg,rgba(255,255,255,.06),transparent),var(--c-panel);border:1px solid var(--c-border);border-radius:6px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:9px;height:9px;border-radius:50%;background:#4ade80"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:rgba(0,0,0,.35);border:1px solid var(--c-border);border-radius:4px;font-size:14px;color:#8b5cf6">SWITCH</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Star Reverie</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style="color:var(--c-muted);font-size:16px">120h</span></div></div>
+          </div>
+          <div style="background:linear-gradient(180deg,rgba(255,255,255,.06),transparent),var(--c-panel);border:1px solid var(--c-border);border-radius:6px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;padding:2px 7px;background:rgba(0,0,0,.35);border:1px solid var(--c-border);border-radius:4px;font-size:12px;color:var(--c-muted)">BACKLOG</span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:rgba(0,0,0,.35);border:1px solid var(--c-border);border-radius:4px;font-size:14px;color:#8b5cf6">PC</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Pixel Kingdom</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:var(--c-muted);font-size:16px">da giocare</span><span style="color:var(--c-muted);font-size:16px">&mdash;</span></div></div>
+          </div>
+          <div style="background:linear-gradient(180deg,rgba(255,255,255,.06),transparent),var(--c-panel);border:1px solid var(--c-border);border-radius:6px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;width:9px;height:9px;border-radius:50%;background:#4ade80"></span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:rgba(0,0,0,.35);border:1px solid var(--c-border);border-radius:4px;font-size:14px;color:#8b5cf6">XBOX</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Chrono Break</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#fbbf24;font-size:17px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9734;</span><span style="color:var(--c-muted);font-size:16px">60h</span></div></div>
+          </div>
+          <div style="background:linear-gradient(180deg,rgba(255,255,255,.06),transparent),var(--c-panel);border:1px solid var(--c-border);border-radius:6px;overflow:hidden">
+            <div style="position:relative;height:150px;background:var(--c-cover);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--c-muted);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:10px;left:10px;padding:2px 7px;background:rgba(0,0,0,.35);border:1px solid var(--c-border);border-radius:4px;font-size:12px;color:#ff2e97">WISH</span>
+              <span style="position:absolute;bottom:10px;right:10px;padding:3px 8px;background:rgba(0,0,0,.35);border:1px solid var(--c-border);border-radius:4px;font-size:14px;color:#8b5cf6">SWITCH</span>
+            </div>
+            <div style="padding:12px 14px"><div style="font-size:20px;font-weight:600;line-height:1.05">Ember Vale</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="color:#ff2e97;font-size:16px">wishlist</span><span style="color:var(--c-muted);font-size:16px">&mdash;</span></div></div>
+          </div>
+        </div>
+
+        <!-- AI avatar popup -->
+        <div style="position:absolute;z-index:50;right:20px;bottom:18px;display:flex;align-items:flex-end;gap:10px;animation:sspop .5s ease-out">
+          <div style="max-width:340px;background:var(--c-panel);border:1px solid #8b5cf6;border-radius:6px;box-shadow:0 8px 22px rgba(139,92,246,.28);padding:12px 14px">
+            <div style="font-family:'Press Start 2P';font-size:9px;color:#8b5cf6;margin-bottom:7px">PIXEL &middot; AI</div>
+            <div style="font-size:18px;line-height:1.25;color:var(--c-text)">Ehi! <span style="color:#fbbf24">Neon Drifter 2</span> esce il 14 marzo. Te lo butto in wishlist? &#9658;</div>
+          </div>
+          <div style="flex:none;width:52px;height:52px;border-radius:6px;background:linear-gradient(135deg,#8b5cf6,#ff2e97);position:relative">
+            <span style="position:absolute;top:14px;left:11px;width:8px;height:8px;border-radius:2px;background:#fff;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;top:14px;right:11px;width:8px;height:8px;border-radius:2px;background:#fff;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;bottom:12px;left:14px;right:14px;height:5px;border-radius:3px;background:rgba(255,255,255,.85)"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <p class="dv-next">Prossimi passi: &ldquo;procediamo con <a class="dv-oid" href="#2a">2a</a>, rendila interattiva&rdquo; &middot; &ldquo;in <a class="dv-oid" href="#2b">2b</a> usa gli angoli di <a class="dv-oid" href="#2a">2a</a>&rdquo; &middot; &ldquo;altre varianti&rdquo;</p>
+</section>
+
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Save-State &mdash; 3 direzioni retro / pixel-art (dashboard libreria)</span></div>
+  <div class="dv-opts">
+
+    <!-- ========================= OPT 1A : ARCADE CRT ========================= -->
+    <div class="dv-opt" id="1a">
+      <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Arcade CRT &mdash; neon su nero, scanline, terminale</div>
+      <div class="dv-card" style="position:relative;width:1180px;background:#0b0b13;border:3px solid #2a2a3d;overflow:hidden;color:#e8e8f2;font-family:'VT323',monospace">
+        <div style="position:absolute;inset:0;pointer-events:none;z-index:40;background:repeating-linear-gradient(rgba(255,255,255,.035) 0 1px, transparent 1px 3px)"></div>
+        <div style="position:absolute;inset:0;pointer-events:none;z-index:41;box-shadow:inset 0 0 120px rgba(0,0,0,.9)"></div>
+
+        <!-- top bar -->
+        <div style="position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px;border-bottom:2px solid #2a2a3d;background:#0e0e18">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:26px;height:26px;background:#ff2e97;box-shadow:6px 0 0 #22d3ee,-6px 0 0 #fbbf24"></div>
+            <div style="font-family:'Press Start 2P';font-size:15px;color:#ff2e97;text-shadow:2px 2px 0 #22d3ee;letter-spacing:1px;margin-left:8px">SAVE&middot;STATE</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex:1;max-width:340px">
+            <div style="flex:1;display:flex;align-items:center;gap:8px;padding:6px 12px;background:#05050a;border:2px solid #2a2a3d">
+              <span style="color:#22d3ee;font-size:20px">&gt;</span>
+              <span style="font-size:20px;color:#6b6b85;letter-spacing:1px">CERCA GIOCHI<span style="color:#22d3ee">_</span></span>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;font-size:17px">
+            <span style="padding:5px 11px;background:#ff2e97;color:#0b0b13;font-weight:700">TUTTI</span>
+            <span style="padding:5px 11px;border:2px solid #2a2a3d;color:#8a8aa8">IN CORSO</span>
+            <span style="padding:5px 11px;border:2px solid #2a2a3d;color:#8a8aa8">FINITI</span>
+            <span style="padding:5px 11px;border:2px solid #2a2a3d;color:#8a8aa8">BACKLOG</span>
+            <span style="padding:5px 11px;border:2px solid #2a2a3d;color:#8a8aa8">WISHLIST</span>
+          </div>
+        </div>
+
+        <!-- stats strip -->
+        <div style="position:relative;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:#2a2a3d;border-bottom:2px solid #2a2a3d">
+          <div style="padding:14px 18px;background:#0e0e18"><div style="font-size:16px;color:#6b6b85;letter-spacing:2px">FINITI</div><div style="font-family:'Press Start 2P';font-size:20px;color:#4ade80;margin-top:8px">342</div></div>
+          <div style="padding:14px 18px;background:#0e0e18"><div style="font-size:16px;color:#6b6b85;letter-spacing:2px">IN CORSO</div><div style="font-family:'Press Start 2P';font-size:20px;color:#22d3ee;margin-top:8px">7</div></div>
+          <div style="padding:14px 18px;background:#0e0e18"><div style="font-size:16px;color:#6b6b85;letter-spacing:2px">BACKLOG</div><div style="font-family:'Press Start 2P';font-size:20px;color:#fbbf24;margin-top:8px">218</div></div>
+          <div style="padding:14px 18px;background:#0e0e18"><div style="font-size:16px;color:#6b6b85;letter-spacing:2px">WISHLIST</div><div style="font-family:'Press Start 2P';font-size:20px;color:#ff2e97;margin-top:8px">54</div></div>
+          <div style="padding:14px 18px;background:#0e0e18"><div style="font-size:16px;color:#6b6b85;letter-spacing:2px">ORE TOTALI</div><div style="font-family:'Press Start 2P';font-size:20px;color:#e8e8f2;margin-top:8px">4821</div></div>
+        </div>
+
+        <!-- game grid -->
+        <div style="position:relative;z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:22px 24px 96px">
+          <!-- card -->
+          <div style="background:#12121d;border:2px solid #2a2a3d">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#3a1730,#3a1730 8px,#2a1024 8px,#2a1024 16px);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.28);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:8px;left:8px;width:11px;height:11px;background:#4ade80;box-shadow:0 0 8px #4ade80"></span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 8px;background:#0b0b13;border:1px solid #2a2a3d;font-size:15px;color:#22d3ee">PC</span>
+            </div>
+            <div style="padding:10px 12px">
+              <div style="font-size:23px;line-height:1;color:#e8e8f2">NEON DRIFTER</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:7px">
+                <span style="color:#fbbf24;font-size:18px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span style="color:#6b6b85;font-size:18px">42h</span>
+              </div>
+            </div>
+          </div>
+          <div style="background:#12121d;border:2px solid #2a2a3d">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#12303a,#12303a 8px,#0d242c 8px,#0d242c 16px);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.28);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:8px;left:8px;width:11px;height:11px;background:#22d3ee;box-shadow:0 0 8px #22d3ee"></span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 8px;background:#0b0b13;border:1px solid #2a2a3d;font-size:15px;color:#22d3ee">PS5</span>
+            </div>
+            <div style="padding:10px 12px">
+              <div style="font-size:23px;line-height:1;color:#e8e8f2">HOLLOW DEPTHS</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:7px">
+                <span style="color:#fbbf24;font-size:18px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+                <span style="color:#6b6b85;font-size:18px">28h</span>
+              </div>
+            </div>
+          </div>
+          <div style="background:#12121d;border:2px solid #2a2a3d">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#2d123a,#2d123a 8px,#220d2c 8px,#220d2c 16px);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.28);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:8px;left:8px;width:11px;height:11px;background:#4ade80;box-shadow:0 0 8px #4ade80"></span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 8px;background:#0b0b13;border:1px solid #2a2a3d;font-size:15px;color:#22d3ee">SWITCH</span>
+            </div>
+            <div style="padding:10px 12px">
+              <div style="font-size:23px;line-height:1;color:#e8e8f2">STAR REVERIE</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:7px">
+                <span style="color:#fbbf24;font-size:18px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span style="color:#6b6b85;font-size:18px">120h</span>
+              </div>
+            </div>
+          </div>
+          <div style="background:#12121d;border:2px solid #2a2a3d">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#3a2f12,#3a2f12 8px,#2c240d 8px,#2c240d 16px);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.28);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:8px;left:8px;width:11px;height:11px;background:#fbbf24;box-shadow:0 0 8px #fbbf24"></span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 8px;background:#0b0b13;border:1px solid #2a2a3d;font-size:15px;color:#22d3ee">PC</span>
+            </div>
+            <div style="padding:10px 12px">
+              <div style="font-size:23px;line-height:1;color:#e8e8f2">PIXEL KINGDOM</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:7px">
+                <span style="color:#6b6b85;font-size:18px;letter-spacing:1px">BACKLOG</span>
+                <span style="color:#6b6b85;font-size:18px">&mdash;</span>
+              </div>
+            </div>
+          </div>
+          <div style="background:#12121d;border:2px solid #2a2a3d">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#123a2a,#123a2a 8px,#0d2c20 8px,#0d2c20 16px);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.28);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:8px;left:8px;width:11px;height:11px;background:#4ade80;box-shadow:0 0 8px #4ade80"></span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 8px;background:#0b0b13;border:1px solid #2a2a3d;font-size:15px;color:#22d3ee">XBOX</span>
+            </div>
+            <div style="padding:10px 12px">
+              <div style="font-size:23px;line-height:1;color:#e8e8f2">CHRONO BREAK</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:7px">
+                <span style="color:#fbbf24;font-size:18px;letter-spacing:1px">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+                <span style="color:#6b6b85;font-size:18px">60h</span>
+              </div>
+            </div>
+          </div>
+          <div style="background:#12121d;border:2px solid #2a2a3d">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#3a1220,#3a1220 8px,#2c0d18 8px,#2c0d18 16px);display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.28);letter-spacing:2px">[ COVER ]</span>
+              <span style="position:absolute;top:8px;left:8px;width:11px;height:11px;background:#ff2e97;box-shadow:0 0 8px #ff2e97"></span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 8px;background:#0b0b13;border:1px solid #2a2a3d;font-size:15px;color:#22d3ee">SWITCH</span>
+            </div>
+            <div style="padding:10px 12px">
+              <div style="font-size:23px;line-height:1;color:#e8e8f2">EMBER VALE</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:7px">
+                <span style="color:#ff2e97;font-size:18px;letter-spacing:1px">WISHLIST</span>
+                <span style="color:#6b6b85;font-size:18px">&mdash;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI avatar popup -->
+        <div style="position:absolute;z-index:50;right:20px;bottom:18px;display:flex;align-items:flex-end;gap:10px;animation:sspop .5s ease-out">
+          <div style="max-width:340px;background:#12121d;border:2px solid #ff2e97;box-shadow:5px 5px 0 rgba(255,46,151,.35);padding:11px 13px">
+            <div style="font-family:'Press Start 2P';font-size:9px;color:#22d3ee;margin-bottom:7px">PIXEL &middot; AI</div>
+            <div style="font-size:19px;line-height:1.15;color:#e8e8f2">Ehi! <span style="color:#fbbf24">Neon Drifter 2</span> esce il 14 marzo. Te lo butto in wishlist? <span style="color:#22d3ee">&#9658;</span></div>
+          </div>
+          <div style="flex:none;width:52px;height:52px;background:#1a1a2a;border:2px solid #22d3ee;box-shadow:0 0 14px rgba(34,211,238,.5);position:relative">
+            <span style="position:absolute;top:14px;left:11px;width:8px;height:8px;background:#22d3ee;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;top:14px;right:11px;width:8px;height:8px;background:#22d3ee;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;bottom:12px;left:14px;right:14px;height:5px;background:#ff2e97"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ========================= OPT 1B : GAME BOY LCD ========================= -->
+    <div class="dv-opt" id="1b">
+      <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Game Boy LCD &mdash; verde monocromatico, dot-matrix, 4 toni</div>
+      <div class="dv-card" style="position:relative;width:1180px;background:#9bbc0f;border:4px solid #0f380f;overflow:hidden;color:#0f380f;font-family:'VT323',monospace">
+        <div style="position:absolute;inset:0;pointer-events:none;z-index:40;background:radial-gradient(#0f380f 1px, transparent 1.4px);background-size:5px 5px;opacity:.12"></div>
+
+        <!-- top bar -->
+        <div style="position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 24px;border-bottom:4px solid #0f380f;background:#8bac0f">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:24px;height:24px;background:#0f380f;box-shadow:inset 0 0 0 4px #9bbc0f, inset 0 0 0 8px #0f380f"></div>
+            <div style="font-family:'Silkscreen';font-weight:700;font-size:17px;color:#0f380f;letter-spacing:1px">SAVE&middot;STATE</div>
+          </div>
+          <div style="flex:1;max-width:340px;display:flex;align-items:center;gap:8px;padding:6px 12px;background:#9bbc0f;border:3px solid #0f380f">
+            <span style="font-size:20px">&#9906;</span>
+            <span style="font-size:20px;color:#306230;letter-spacing:1px">CERCA GIOCHI</span>
+          </div>
+          <div style="display:flex;gap:6px;font-size:16px;font-family:'Silkscreen'">
+            <span style="padding:6px 10px;background:#0f380f;color:#9bbc0f">TUTTI</span>
+            <span style="padding:6px 10px;border:3px solid #0f380f;color:#306230">CORSO</span>
+            <span style="padding:6px 10px;border:3px solid #0f380f;color:#306230">FINITI</span>
+            <span style="padding:6px 10px;border:3px solid #0f380f;color:#306230">WISH</span>
+          </div>
+        </div>
+
+        <!-- stats strip -->
+        <div style="position:relative;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;background:#0f380f;border-bottom:4px solid #0f380f">
+          <div style="padding:14px 18px;background:#8bac0f"><div style="font-size:16px;color:#306230;letter-spacing:2px">FINITI</div><div style="font-family:'Silkscreen';font-weight:700;font-size:19px;color:#0f380f;margin-top:8px">342</div></div>
+          <div style="padding:14px 18px;background:#8bac0f"><div style="font-size:16px;color:#306230;letter-spacing:2px">IN CORSO</div><div style="font-family:'Silkscreen';font-weight:700;font-size:19px;color:#0f380f;margin-top:8px">07</div></div>
+          <div style="padding:14px 18px;background:#8bac0f"><div style="font-size:16px;color:#306230;letter-spacing:2px">BACKLOG</div><div style="font-family:'Silkscreen';font-weight:700;font-size:19px;color:#0f380f;margin-top:8px">218</div></div>
+          <div style="padding:14px 18px;background:#8bac0f"><div style="font-size:16px;color:#306230;letter-spacing:2px">WISHLIST</div><div style="font-family:'Silkscreen';font-weight:700;font-size:19px;color:#0f380f;margin-top:8px">54</div></div>
+          <div style="padding:14px 18px;background:#8bac0f"><div style="font-size:16px;color:#306230;letter-spacing:2px">ORE</div><div style="font-family:'Silkscreen';font-weight:700;font-size:19px;color:#0f380f;margin-top:8px">4821</div></div>
+        </div>
+
+        <!-- game grid -->
+        <div style="position:relative;z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:22px 24px 96px">
+          <div style="background:#8bac0f;border:3px solid #0f380f">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(0deg,#306230,#306230 5px,#8bac0f 5px,#8bac0f 10px);display:flex;align-items:center;justify-content:center;border-bottom:3px solid #0f380f">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:#0f380f;letter-spacing:2px;background:#9bbc0f;padding:2px 6px;border:2px solid #0f380f">COVER</span>
+              <span style="position:absolute;top:8px;left:8px;width:12px;height:12px;background:#0f380f"></span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 7px;background:#0f380f;color:#9bbc0f;font-size:14px">PC</span>
+            </div>
+            <div style="padding:9px 11px"><div style="font-size:22px;line-height:1;color:#0f380f;font-family:'Silkscreen';font-weight:700">NEON DRIFTER</div>
+              <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px"><span style="letter-spacing:1px">&#9632;&#9632;&#9632;&#9632;&#9632;</span><span style="color:#306230">42h</span></div></div>
+          </div>
+          <div style="background:#8bac0f;border:3px solid #0f380f">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(0deg,#306230,#306230 5px,#8bac0f 5px,#8bac0f 10px);display:flex;align-items:center;justify-content:center;border-bottom:3px solid #0f380f">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:#0f380f;letter-spacing:2px;background:#9bbc0f;padding:2px 6px;border:2px solid #0f380f">COVER</span>
+              <span style="position:absolute;top:8px;left:8px;width:12px;height:12px;background:#9bbc0f;box-shadow:inset 0 0 0 3px #0f380f"></span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 7px;background:#0f380f;color:#9bbc0f;font-size:14px">PS5</span>
+            </div>
+            <div style="padding:9px 11px"><div style="font-size:22px;line-height:1;color:#0f380f;font-family:'Silkscreen';font-weight:700">HOLLOW DEPTHS</div>
+              <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px"><span style="letter-spacing:1px">&#9632;&#9632;&#9632;&#9632;&#9633;</span><span style="color:#306230">28h</span></div></div>
+          </div>
+          <div style="background:#8bac0f;border:3px solid #0f380f">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(0deg,#306230,#306230 5px,#8bac0f 5px,#8bac0f 10px);display:flex;align-items:center;justify-content:center;border-bottom:3px solid #0f380f">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:#0f380f;letter-spacing:2px;background:#9bbc0f;padding:2px 6px;border:2px solid #0f380f">COVER</span>
+              <span style="position:absolute;top:8px;left:8px;width:12px;height:12px;background:#0f380f"></span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 7px;background:#0f380f;color:#9bbc0f;font-size:14px">SWITCH</span>
+            </div>
+            <div style="padding:9px 11px"><div style="font-size:22px;line-height:1;color:#0f380f;font-family:'Silkscreen';font-weight:700">STAR REVERIE</div>
+              <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px"><span style="letter-spacing:1px">&#9632;&#9632;&#9632;&#9632;&#9632;</span><span style="color:#306230">120h</span></div></div>
+          </div>
+          <div style="background:#8bac0f;border:3px solid #0f380f">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(0deg,#306230,#306230 5px,#8bac0f 5px,#8bac0f 10px);display:flex;align-items:center;justify-content:center;border-bottom:3px solid #0f380f">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:#0f380f;letter-spacing:2px;background:#9bbc0f;padding:2px 6px;border:2px solid #0f380f">COVER</span>
+              <span style="position:absolute;top:8px;left:8px;padding:1px 6px;background:#9bbc0f;border:2px solid #0f380f;font-size:12px;font-family:ui-monospace">BKLG</span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 7px;background:#0f380f;color:#9bbc0f;font-size:14px">PC</span>
+            </div>
+            <div style="padding:9px 11px"><div style="font-size:22px;line-height:1;color:#0f380f;font-family:'Silkscreen';font-weight:700">PIXEL KINGDOM</div>
+              <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px"><span style="color:#306230">DA GIOCARE</span><span style="color:#306230">&mdash;</span></div></div>
+          </div>
+          <div style="background:#8bac0f;border:3px solid #0f380f">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(0deg,#306230,#306230 5px,#8bac0f 5px,#8bac0f 10px);display:flex;align-items:center;justify-content:center;border-bottom:3px solid #0f380f">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:#0f380f;letter-spacing:2px;background:#9bbc0f;padding:2px 6px;border:2px solid #0f380f">COVER</span>
+              <span style="position:absolute;top:8px;left:8px;width:12px;height:12px;background:#0f380f"></span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 7px;background:#0f380f;color:#9bbc0f;font-size:14px">XBOX</span>
+            </div>
+            <div style="padding:9px 11px"><div style="font-size:22px;line-height:1;color:#0f380f;font-family:'Silkscreen';font-weight:700">CHRONO BREAK</div>
+              <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px"><span style="letter-spacing:1px">&#9632;&#9632;&#9632;&#9632;&#9633;</span><span style="color:#306230">60h</span></div></div>
+          </div>
+          <div style="background:#8bac0f;border:3px solid #0f380f">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(0deg,#306230,#306230 5px,#8bac0f 5px,#8bac0f 10px);display:flex;align-items:center;justify-content:center;border-bottom:3px solid #0f380f">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:#0f380f;letter-spacing:2px;background:#9bbc0f;padding:2px 6px;border:2px solid #0f380f">COVER</span>
+              <span style="position:absolute;top:8px;left:8px;padding:1px 6px;background:#9bbc0f;border:2px solid #0f380f;font-size:12px;font-family:ui-monospace">WISH</span>
+              <span style="position:absolute;bottom:8px;right:8px;padding:2px 7px;background:#0f380f;color:#9bbc0f;font-size:14px">SWITCH</span>
+            </div>
+            <div style="padding:9px 11px"><div style="font-size:22px;line-height:1;color:#0f380f;font-family:'Silkscreen';font-weight:700">EMBER VALE</div>
+              <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px"><span style="color:#306230">WISHLIST</span><span style="color:#306230">&mdash;</span></div></div>
+          </div>
+        </div>
+
+        <!-- AI avatar popup -->
+        <div style="position:absolute;z-index:50;right:20px;bottom:18px;display:flex;align-items:flex-end;gap:10px;animation:sspop .5s ease-out">
+          <div style="max-width:340px;background:#9bbc0f;border:3px solid #0f380f;box-shadow:5px 5px 0 #0f380f;padding:11px 13px">
+            <div style="font-family:'Silkscreen';font-weight:700;font-size:12px;color:#0f380f;margin-bottom:7px">PIXEL &middot; AI</div>
+            <div style="font-size:19px;line-height:1.15;color:#0f380f">Ehi! <b>Neon Drifter 2</b> esce il 14 marzo. Lo metto in wishlist? &#9654;</div>
+          </div>
+          <div style="flex:none;width:52px;height:52px;background:#8bac0f;border:3px solid #0f380f;position:relative">
+            <span style="position:absolute;top:14px;left:11px;width:8px;height:8px;background:#0f380f;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;top:14px;right:11px;width:8px;height:8px;background:#0f380f;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;bottom:12px;left:14px;right:14px;height:5px;background:#0f380f"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================= OPT 1C : PAPER 8-BIT ========================= -->
+    <div class="dv-opt" id="1c">
+      <div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Paper 8-bit &mdash; carta chiara, editoriale, accento arancio</div>
+      <div class="dv-card" style="position:relative;width:1180px;background:#f4ecd8;border:3px solid #1c1a17;overflow:hidden;color:#1c1a17;font-family:'Pixelify Sans',sans-serif">
+
+        <!-- top bar -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 28px;border-bottom:3px solid #1c1a17">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:24px;height:24px;background:#d1401f;box-shadow:5px 5px 0 #1c1a17"></div>
+            <div style="font-family:'Press Start 2P';font-size:14px;color:#1c1a17;letter-spacing:1px;margin-left:6px">SAVE&middot;STATE</div>
+          </div>
+          <div style="flex:1;max-width:360px;display:flex;align-items:center;gap:8px;padding:9px 14px;background:#fff;border:3px solid #1c1a17">
+            <span style="font-size:18px">&#9906;</span>
+            <span style="font-size:19px;color:#9a8f76">Cerca nella libreria&hellip;</span>
+          </div>
+          <div style="display:flex;gap:8px;font-size:17px">
+            <span style="padding:8px 12px;background:#1c1a17;color:#f4ecd8">Tutti</span>
+            <span style="padding:8px 12px;border:3px solid #1c1a17">In corso</span>
+            <span style="padding:8px 12px;border:3px solid #1c1a17">Finiti</span>
+            <span style="padding:8px 12px;border:3px solid #1c1a17">Wishlist</span>
+          </div>
+        </div>
+
+        <!-- featured + stats -->
+        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:20px;padding:24px 28px 4px">
+          <div style="display:flex;gap:16px;background:#fff;border:3px solid #1c1a17;box-shadow:7px 7px 0 #1c1a17;padding:16px">
+            <div style="flex:none;width:120px;height:160px;background:repeating-linear-gradient(45deg,#e9dcc0,#e9dcc0 8px,#f4ecd8 8px,#f4ecd8 16px);border:3px solid #1c1a17;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:11px;color:#9a8f76">COVER</span>
+            </div>
+            <div style="display:flex;flex-direction:column;justify-content:center">
+              <div style="font-family:'Press Start 2P';font-size:9px;color:#d1401f;letter-spacing:1px">&#9658; CONTINUA A GIOCARE</div>
+              <div style="font-size:34px;line-height:1;margin-top:12px;font-weight:600">Void Runner</div>
+              <div style="font-size:19px;color:#6b6357;margin-top:8px">PS5 &middot; 33 ore &middot; capitolo 4 di 7</div>
+              <div style="margin-top:14px;height:14px;background:#e9dcc0;border:3px solid #1c1a17"><div style="width:58%;height:100%;background:#d1401f"></div></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="background:#fff;border:3px solid #1c1a17;padding:12px 14px"><div style="font-size:17px;color:#6b6357">Finiti</div><div style="font-family:'Press Start 2P';font-size:22px;margin-top:10px">342</div></div>
+            <div style="background:#fff;border:3px solid #1c1a17;padding:12px 14px"><div style="font-size:17px;color:#6b6357">In corso</div><div style="font-family:'Press Start 2P';font-size:22px;margin-top:10px;color:#d1401f">7</div></div>
+            <div style="background:#fff;border:3px solid #1c1a17;padding:12px 14px"><div style="font-size:17px;color:#6b6357">Backlog</div><div style="font-family:'Press Start 2P';font-size:22px;margin-top:10px">218</div></div>
+            <div style="background:#fff;border:3px solid #1c1a17;padding:12px 14px"><div style="font-size:17px;color:#6b6357">Ore totali</div><div style="font-family:'Press Start 2P';font-size:22px;margin-top:10px">4821</div></div>
+          </div>
+        </div>
+
+        <!-- shelf title -->
+        <div style="display:flex;align-items:center;gap:12px;padding:20px 28px 12px">
+          <div style="font-family:'Press Start 2P';font-size:11px">La tua libreria</div>
+          <div style="flex:1;height:3px;background:#1c1a17"></div>
+        </div>
+
+        <!-- game grid -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:0 28px 96px">
+          <div style="background:#fff;border:3px solid #1c1a17">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#e9dcc0,#e9dcc0 8px,#f4ecd8 8px,#f4ecd8 16px);border-bottom:3px solid #1c1a17;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:11px;color:#9a8f76">COVER</span>
+              <span style="position:absolute;top:0;left:0;padding:2px 8px;background:#3b7a57;color:#fff;font-size:14px">FINITO</span>
+            </div>
+            <div style="padding:10px 12px"><div style="font-size:22px;line-height:1;font-weight:600">Neon Drifter</div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:16px"><span style="color:#d1401f">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style="color:#6b6357">PC &middot; 42h</span></div></div>
+          </div>
+          <div style="background:#fff;border:3px solid #1c1a17">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#e9dcc0,#e9dcc0 8px,#f4ecd8 8px,#f4ecd8 16px);border-bottom:3px solid #1c1a17;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:11px;color:#9a8f76">COVER</span>
+              <span style="position:absolute;top:0;left:0;padding:2px 8px;background:#d1401f;color:#fff;font-size:14px">IN CORSO</span>
+            </div>
+            <div style="padding:10px 12px"><div style="font-size:22px;line-height:1;font-weight:600">Hollow Depths</div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:16px"><span style="color:#d1401f">&#9733;&#9733;&#9733;&#9733;&#9734;</span><span style="color:#6b6357">PS5 &middot; 28h</span></div></div>
+          </div>
+          <div style="background:#fff;border:3px solid #1c1a17">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#e9dcc0,#e9dcc0 8px,#f4ecd8 8px,#f4ecd8 16px);border-bottom:3px solid #1c1a17;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:11px;color:#9a8f76">COVER</span>
+              <span style="position:absolute;top:0;left:0;padding:2px 8px;background:#3b7a57;color:#fff;font-size:14px">FINITO</span>
+            </div>
+            <div style="padding:10px 12px"><div style="font-size:22px;line-height:1;font-weight:600">Star Reverie</div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:16px"><span style="color:#d1401f">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style="color:#6b6357">SW &middot; 120h</span></div></div>
+          </div>
+          <div style="background:#fff;border:3px solid #1c1a17">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#e9dcc0,#e9dcc0 8px,#f4ecd8 8px,#f4ecd8 16px);border-bottom:3px solid #1c1a17;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:11px;color:#9a8f76">COVER</span>
+              <span style="position:absolute;top:0;left:0;padding:2px 8px;background:#9a8f76;color:#fff;font-size:14px">BACKLOG</span>
+            </div>
+            <div style="padding:10px 12px"><div style="font-size:22px;line-height:1;font-weight:600">Pixel Kingdom</div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:16px"><span style="color:#9a8f76">da giocare</span><span style="color:#6b6357">PC</span></div></div>
+          </div>
+          <div style="background:#fff;border:3px solid #1c1a17">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#e9dcc0,#e9dcc0 8px,#f4ecd8 8px,#f4ecd8 16px);border-bottom:3px solid #1c1a17;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:11px;color:#9a8f76">COVER</span>
+              <span style="position:absolute;top:0;left:0;padding:2px 8px;background:#3b7a57;color:#fff;font-size:14px">FINITO</span>
+            </div>
+            <div style="padding:10px 12px"><div style="font-size:22px;line-height:1;font-weight:600">Chrono Break</div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:16px"><span style="color:#d1401f">&#9733;&#9733;&#9733;&#9733;&#9734;</span><span style="color:#6b6357">XB &middot; 60h</span></div></div>
+          </div>
+          <div style="background:#fff;border:3px solid #1c1a17">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#e9dcc0,#e9dcc0 8px,#f4ecd8 8px,#f4ecd8 16px);border-bottom:3px solid #1c1a17;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:11px;color:#9a8f76">COVER</span>
+              <span style="position:absolute;top:0;left:0;padding:2px 8px;background:#c026a8;color:#fff;font-size:14px">WISHLIST</span>
+            </div>
+            <div style="padding:10px 12px"><div style="font-size:22px;line-height:1;font-weight:600">Ember Vale</div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:16px"><span style="color:#9a8f76">voglio!</span><span style="color:#6b6357">SW</span></div></div>
+          </div>
+          <div style="background:#fff;border:3px solid #1c1a17">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#e9dcc0,#e9dcc0 8px,#f4ecd8 8px,#f4ecd8 16px);border-bottom:3px solid #1c1a17;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:11px;color:#9a8f76">COVER</span>
+              <span style="position:absolute;top:0;left:0;padding:2px 8px;background:#d1401f;color:#fff;font-size:14px">IN CORSO</span>
+            </div>
+            <div style="padding:10px 12px"><div style="font-size:22px;line-height:1;font-weight:600">Void Runner</div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:16px"><span style="color:#d1401f">&#9733;&#9733;&#9733;&#9733;&#9734;</span><span style="color:#6b6357">PS5 &middot; 33h</span></div></div>
+          </div>
+          <div style="background:#fff;border:3px solid #1c1a17">
+            <div style="position:relative;height:150px;background:repeating-linear-gradient(45deg,#e9dcc0,#e9dcc0 8px,#f4ecd8 8px,#f4ecd8 16px);border-bottom:3px solid #1c1a17;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:ui-monospace,monospace;font-size:11px;color:#9a8f76">COVER</span>
+              <span style="position:absolute;top:0;left:0;padding:2px 8px;background:#3b7a57;color:#fff;font-size:14px">FINITO</span>
+            </div>
+            <div style="padding:10px 12px"><div style="font-size:22px;line-height:1;font-weight:600">Last Lantern</div>
+              <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:16px"><span style="color:#d1401f">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style="color:#6b6357">PC &middot; 18h</span></div></div>
+          </div>
+        </div>
+
+        <!-- AI avatar popup -->
+        <div style="position:absolute;z-index:50;right:22px;bottom:20px;display:flex;align-items:flex-end;gap:10px;animation:sspop .5s ease-out">
+          <div style="max-width:340px;background:#1c1a17;color:#f4ecd8;border:3px solid #1c1a17;box-shadow:6px 6px 0 #d1401f;padding:12px 14px">
+            <div style="font-family:'Press Start 2P';font-size:9px;color:#d1401f;margin-bottom:8px">PIXEL &middot; AI</div>
+            <div style="font-size:19px;line-height:1.2">Psst&hellip; lo studio di <b style="color:#f6b73c">Star Reverie</b> ha annunciato un nuovo titolo. Curioso? &#9658;</div>
+          </div>
+          <div style="flex:none;width:52px;height:52px;background:#d1401f;border:3px solid #1c1a17;position:relative">
+            <span style="position:absolute;top:14px;left:11px;width:8px;height:8px;background:#1c1a17;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;top:14px;right:11px;width:8px;height:8px;background:#1c1a17;animation:ssblink 4s infinite"></span>
+            <span style="position:absolute;bottom:12px;left:14px;right:14px;height:5px;background:#1c1a17"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- END OPTS -->
+
+  </div>
+  <p class="dv-next">Prossimi passi: &ldquo;mi piace <a class="dv-oid" href="#1a">1a</a>, rendila interattiva&rdquo; &middot; &ldquo;in <a class="dv-oid" href="#1a">1a</a> mostra pi&ugrave; giochi in griglia&rdquo; &middot; &ldquo;dammi altre direzioni&rdquo;</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.cards = {};
+    this.modes = { a:'dark', b:'dark', c:'dark' };
+    this.themes = {
+      dark:  {'--c-bg':'#0b0b13','--c-panel':'#12121d','--c-elev':'#0e0e18','--c-border':'#2a2a3d','--c-text':'#e8e8f2','--c-muted':'#8a8aa8','--c-cover':'#1a1a2a'},
+      light: {'--c-bg':'#eaecf4','--c-panel':'#ffffff','--c-elev':'#f4f5fb','--c-border':'#d1d5e6','--c-text':'#181828','--c-muted':'#6b6f8c','--c-cover':'#e6e8f4'}
+    };
+  }
+  apply(key){
+    const el = this.cards[key]; if(!el) return;
+    const v = this.themes[this.modes[key]];
+    Object.keys(v).forEach(k => el.style.setProperty(k, v[k]));
+    const on = this.modes[key] === 'light';
+    const knob = el.querySelector('[data-knob]');
+    if(knob) knob.style.transform = on ? 'translateX(20px)' : 'translateX(0px)';
+    const track = el.querySelector('[data-track]');
+    if(track) track.style.background = on ? '#fbbf24' : '#3a3a52';
+    const sun = el.querySelector('[data-sun]');
+    const moon = el.querySelector('[data-moon]');
+    if(sun) sun.style.opacity = on ? '1' : '.35';
+    if(moon) moon.style.opacity = on ? '.35' : '1';
+  }
+  toggle(key){ this.modes[key] = this.modes[key] === 'dark' ? 'light' : 'dark'; this.apply(key); }
+  setRef(key){ return el => { if(el){ this.cards[key] = el; } }; }
+  renderVals(){
+    return {
+      ref2a: this.setRef('a'), tog2a: () => this.toggle('a'),
+      ref2b: this.setRef('b'), tog2b: () => this.toggle('b'),
+      ref2c: this.setRef('c'), tog2c: () => this.toggle('c')
+    };
+  }
+}
+</script>
+</body>
+</html>
