@@ -94,4 +94,4 @@ Auth is offloaded to Keycloak — the frontend runs Authorization Code + PKCE di
 
 ## Status
 
-Architecture designed, repo scaffolded. Backend and frontend implementation not started yet.
+Architecture designed. Backend skeleton scaffolded (see [backend/README.md](backend/README.md) for what's real vs. stubbed). Frontend not started yet.

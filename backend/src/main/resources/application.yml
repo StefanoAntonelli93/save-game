@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: save-state-backend
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:savestate}
+    username: ${DB_USER:savestate}
+    password: ${DB_PASSWORD:savestate}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8081/realms/savestate}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+savestate:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+  trophy-sync:
+    enabled: ${TROPHY_SYNC_ENABLED:false}
+    interval-cron: ${TROPHY_SYNC_CRON:0 0 */6 * * *}
+  igdb:
+    client-id: ${IGDB_CLIENT_ID:}
+    client-secret: ${IGDB_CLIENT_SECRET:}
+  steam:
+    api-key: ${STEAM_API_KEY:}
+  xbox:
+    openxbl-api-key: ${OPENXBL_API_KEY:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      igdb:
+        sliding-window-size: 20
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+      steam:
+        sliding-window-size: 20
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+  ratelimiter:
+    instances:
+      igdb:
+        limit-for-period: 4
+        limit-refresh-period: 1s
+        timeout-duration: 5s
+      steam:
+        limit-for-period: 5
+        limit-refresh-period: 1s
+        timeout-duration: 5s
