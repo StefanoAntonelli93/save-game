@@ -81,7 +81,7 @@ Auth is offloaded to Keycloak — the frontend runs Authorization Code + PKCE di
 
 - **Backend**: Spring Boot 3.x, Java 21, Spring Data JPA + PostgreSQL, Flyway, Spring Security (OAuth2 Resource Server), Spring WebClient + Resilience4j for external API calls, MapStruct, Testcontainers
 - **Auth**: Keycloak (local password + Google federated login)
-- **Frontend**: not chosen yet
+- **Frontend**: React 19 + TypeScript + Vite, TanStack Query, react-router-dom, react-oidc-context for Keycloak auth
 - **Deployment**: docker-compose (Postgres + Keycloak + backend, frontend served separately), single VM to start
 
 ## Repository structure
@@ -94,4 +94,4 @@ Auth is offloaded to Keycloak — the frontend runs Authorization Code + PKCE di
 
 ## Status
 
-Architecture designed. Backend skeleton scaffolded (see [backend/README.md](backend/README.md) for what's real vs. stubbed). Frontend not started yet.
+Architecture designed. Backend and frontend skeletons scaffolded — see [backend/README.md](backend/README.md) and [frontend/README.md](frontend/README.md) for what's real vs. stubbed in each. Keycloak realm/client setup and real provider credentials (IGDB, Steam, etc.) still need to be configured manually.
